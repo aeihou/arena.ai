@@ -60,3 +60,13 @@ derived rather than recorded here.
 - **Decisions:** Keep procedures and mutable state in their authoritative files;
   the root README links without duplicating them.
 - **Validation:** Self-consistency and Git whitespace checks pass.
+
+## 2026-08-19 — Active self-describing repository goal
+
+- **Revision:** 7
+- **Outcome:** Established the repository north star and added dynamic directory
+  and descriptor discovery to self-description.
+- **Decisions:** Future growth must update canonical descriptors, registries,
+  context, focused tests, and validation without static inventories.
+- **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
+  checks pass.

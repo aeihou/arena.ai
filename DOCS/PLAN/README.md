@@ -11,6 +11,7 @@ lives only in the linked plan files.
 |---|---|
 | Proposed | An idea has been documented but not reviewed. |
 | Pending approval | The developer must approve a decision before implementation. |
+| Active | An approved ongoing objective guides current and future optimization. |
 | Blocked | The plan is approved or actionable but an external dependency prevents progress. |
 | Deferred | No action is expected until its trigger or purpose becomes clear. |
 | Completed | Acceptance criteria were met and the result was validated. |
@@ -25,6 +26,7 @@ lives only in the linked plan files.
 | [`DOCS/PLAN/INTERACTIVE_FIXER/README.md`](INTERACTIVE_FIXER/README.md) | Completed | Keep fixes deterministic and developer-approved. |
 | [`DOCS/PLAN/SESSION_CONTEXT/README.md`](SESSION_CONTEXT/README.md) | Completed | Refresh rolling context and append compact outcomes with meaningful changes. |
 | [`DOCS/PLAN/CONSISTENCY_GUARDS/README.md`](CONSISTENCY_GUARDS/README.md) | Completed | Preserve generic heading-driven plan and context checks. |
+| [`DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md`](SELF_DESCRIBING_REPOSITORY/README.md) | Active | Use this goal to prioritize future repository optimization. |
 | [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) | Blocked | Restore GitHub workflow permission, then activate the template. |
 | [`DOCS/PLAN/PG01/README.md`](PG01/README.md) | Deferred | Ask the developer for a concrete playground purpose. |
 

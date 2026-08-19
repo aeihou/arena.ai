@@ -2,7 +2,9 @@
 
 # AEIHOU workspace
 
-Portable workspace for AEIHOU and cross-session agent continuity.
+Self-describing workspace for AEIHOU with portable session hand-off, dynamic
+growth, and machine-enforced consistency. The active goal is documented in
+[`DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md`](DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md).
 
 ## Start here
 

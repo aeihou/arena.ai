@@ -12,7 +12,7 @@ Run from the repository root:
 # Verify
 python3 SRC/tools/self_consistency.py
 
-# Describe files and top-level purposes, then verify
+# Describe directories, descriptors, files, and top-level purposes, then verify
 python3 SRC/tools/self_consistency.py --describe
 
 # Preview grouped safe fixes for developer approval
@@ -23,7 +23,8 @@ python3 SRC/tools/self_consistency.py --format json
 python3 SRC/tools/self_consistency.py --report self-consistency-report.md
 ```
 
-Combine `--describe --format json` for structured description and findings.
+Combine `--describe --format json` for structured description and findings,
+including `directory_paths`, `directory_descriptors`, and `file_paths`.
 Interactive prompts default to No and never delete files or alter directory
 structure.
 

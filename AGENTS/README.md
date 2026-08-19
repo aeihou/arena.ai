@@ -4,6 +4,9 @@
 
 Authoritative operating procedure for the supported portable workspace.
 
+Prioritize work against
+[`DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md`](../DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md).
+
 ## Portability scope
 
 This contract assumes Git, an `origin` remote hosted on GitHub, Python 3.9 or

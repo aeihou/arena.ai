@@ -78,6 +78,8 @@ class RepositoryDescription:
     branch: str | None
     directories: int
     files: int
+    directory_paths: tuple[str, ...]
+    directory_descriptors: tuple[tuple[str, str], ...]
     file_paths: tuple[str, ...]
     sections: tuple[tuple[str, str], ...]
 
@@ -121,30 +123,32 @@ def _current_branch(root: Path) -> str | None:
     return result.stdout.strip() or None
 
 
-def _folder_summary(directory: Path) -> str:
+def _folder_descriptor(directory: Path) -> Path | None:
     candidates = (directory / "README.md", directory / (directory.name + ".md"))
-    for candidate in candidates:
-        if not candidate.is_file():
-            continue
-        text = _read_text(candidate) or ""
-        paragraph: list[str] = []
-        for line in text.splitlines():
-            stripped = line.strip()
-            if not paragraph:
-                if (
-                    not stripped
-                    or stripped.startswith(("#", "```", ">"))
-                    or README_FULL_PATH.fullmatch(stripped)
-                ):
-                    continue
-                paragraph.append(stripped)
-            elif not stripped or stripped.startswith(("#", "```")):
-                break
-            else:
-                paragraph.append(stripped)
-        if paragraph:
-            return " ".join(paragraph)
-    return "No summary available."
+    return next((candidate for candidate in candidates if candidate.is_file()), None)
+
+
+def _folder_summary(directory: Path) -> str:
+    descriptor = _folder_descriptor(directory)
+    if descriptor is None:
+        return "No summary available."
+    text = _read_text(descriptor) or ""
+    paragraph: list[str] = []
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not paragraph:
+            if (
+                not stripped
+                or stripped.startswith(("#", "```", ">"))
+                or README_FULL_PATH.fullmatch(stripped)
+            ):
+                continue
+            paragraph.append(stripped)
+        elif not stripped or stripped.startswith(("#", "```")):
+            break
+        else:
+            paragraph.append(stripped)
+    return " ".join(paragraph) if paragraph else "No summary available."
 
 
 def describe_repository(root: Path) -> RepositoryDescription:
@@ -152,7 +156,7 @@ def describe_repository(root: Path) -> RepositoryDescription:
     files = list(iter_files(root))
     directories = [
         path
-        for path in root.rglob("*")
+        for path in sorted(root.rglob("*"))
         if path.is_dir() and not _is_ignored(path, root)
     ]
     sections = tuple(
@@ -165,6 +169,18 @@ def describe_repository(root: Path) -> RepositoryDescription:
         branch=_current_branch(root),
         directories=len(directories),
         files=len(files),
+        directory_paths=tuple(
+            path.relative_to(root).as_posix() + "/" for path in directories
+        ),
+        directory_descriptors=tuple(
+            (
+                path.relative_to(root).as_posix() + "/",
+                descriptor.relative_to(root).as_posix(),
+            )
+            for path in directories
+            for descriptor in [_folder_descriptor(path)]
+            if descriptor is not None
+        ),
         file_paths=tuple(path.relative_to(root).as_posix() for path in files),
         sections=sections,
     )
@@ -180,6 +196,12 @@ def description_text(description: RepositoryDescription) -> str:
         "Top-level sections:",
     ]
     lines.extend("- {} {}".format(name, summary) for name, summary in description.sections)
+    descriptors = dict(description.directory_descriptors)
+    lines.append("Directories:")
+    lines.extend(
+        "- {} -> {}".format(path, descriptors.get(path, "descriptor not required"))
+        for path in description.directory_paths
+    )
     lines.append("Files:")
     lines.extend("- {}".format(path) for path in description.file_paths)
     return "\n".join(lines)

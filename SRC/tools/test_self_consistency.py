@@ -119,8 +119,12 @@ class VerifierTests(unittest.TestCase):
 
         self.assertEqual(root.name, description.name)
         self.assertIn(("SRC/", "Source workspaces."), description.sections)
+        self.assertEqual(("SRC/",), description.directory_paths)
+        self.assertEqual((("SRC/", "SRC/README.md"),), description.directory_descriptors)
         self.assertEqual(("README.md", "SRC/README.md"), description.file_paths)
-        self.assertIn("Files:\n- README.md\n- SRC/README.md", verifier.description_text(description))
+        rendered = verifier.description_text(description)
+        self.assertIn("Directories:\n- SRC/ -> SRC/README.md", rendered)
+        self.assertIn("Files:\n- README.md\n- SRC/README.md", rendered)
         self.assertEqual(2, description.files)
 
     def test_reports_formatting_and_stale_placeholder(self) -> None:
