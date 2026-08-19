@@ -11,22 +11,32 @@ Agents maintain this section as plans are proposed, approved, completed, or
 superseded. Structural decisions require developer approval before changes are
 applied.
 
-1. **PG01 definition** — agree on the playground's purpose and whether it needs
-   dedicated source and documentation subfolders.
-2. **Continuous verification** — install `GITHUB/self-consistency.yml` as an
+1. **Continuous verification** — install `GITHUB/self-consistency.yml` as an
    active workflow when GitHub workflow permissions are available.
+
+## Deferred decisions
+
+- **PG01 definition** — keep the playground minimal until the developer chooses
+  a concrete purpose. Do not add speculative subfolders.
 
 ## Completed plans
 
 - **File-structure optimization** — consolidated maintenance tooling under
-  `SRC/tools/` and replaced duplicated hand-off content with smart,
-  repository-derived self-description. See [`FILE_STRUCTURE/`](FILE_STRUCTURE/).
+  `SRC/tools/` and replaced duplicated hand-off content with a slim hand-off.
+  See [`FILE_STRUCTURE/`](FILE_STRUCTURE/).
+- **Smart self-description** — added repository-derived branch, inventory, and
+  top-level purpose output to the verifier; parent documentation now indexes
+  each direct visible subfolder.
 
 ## Self-consistency report generation
 
 The portable verifier checks local Markdown links, canonical names, directory
-self-description, stale `.gitkeep` files, current Arena branch references, and
-text formatting.
+self-description and child indexes, stale `.gitkeep` files, current Arena branch
+references, and text formatting. Derive a current repository description with:
+
+```sh
+python3 SRC/tools/self_consistency.py --describe
+```
 
 Use its interactive terminal flow when collaborating with a developer:
 

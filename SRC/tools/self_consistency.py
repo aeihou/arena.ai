@@ -69,6 +69,17 @@ class Finding:
     message: str
 
 
+@dataclass(frozen=True)
+class RepositoryDescription:
+    """A concise inventory derived from the current working copy."""
+
+    name: str
+    branch: str | None
+    directories: int
+    files: int
+    sections: tuple[tuple[str, str], ...]
+
+
 def _is_ignored(path: Path, root: Path) -> bool:
     relative = path.relative_to(root)
     return any(part in IGNORED_DIRECTORIES for part in relative.parts)
@@ -92,6 +103,77 @@ def _read_text(path: Path) -> str | None:
         return path.read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError):
         return None
+
+
+def _current_branch(root: Path) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "branch", "--show-current"],
+            cwd=str(root),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return result.stdout.strip() or None
+
+
+def _folder_summary(directory: Path) -> str:
+    candidates = (directory / "README.md", directory / (directory.name + ".md"))
+    for candidate in candidates:
+        if not candidate.is_file():
+            continue
+        text = _read_text(candidate) or ""
+        paragraph: list[str] = []
+        for line in text.splitlines():
+            stripped = line.strip()
+            if not paragraph:
+                if not stripped or stripped.startswith(("#", "```", ">")):
+                    continue
+                paragraph.append(stripped)
+            elif not stripped or stripped.startswith(("#", "```")):
+                break
+            else:
+                paragraph.append(stripped)
+        if paragraph:
+            return " ".join(paragraph)
+    return "No summary available."
+
+
+def describe_repository(root: Path) -> RepositoryDescription:
+    """Derive a compact repository inventory without a maintained static tree."""
+    files = list(iter_files(root))
+    directories = [
+        path
+        for path in root.rglob("*")
+        if path.is_dir() and not _is_ignored(path, root)
+    ]
+    sections = tuple(
+        (path.name + "/", _folder_summary(path))
+        for path in sorted(root.iterdir())
+        if path.is_dir() and not path.name.startswith(".") and not _is_ignored(path, root)
+    )
+    return RepositoryDescription(
+        name=root.name,
+        branch=_current_branch(root),
+        directories=len(directories),
+        files=len(files),
+        sections=sections,
+    )
+
+
+def description_text(description: RepositoryDescription) -> str:
+    lines = [
+        "Repository: {}".format(description.name),
+        "Branch: {}".format(description.branch or "not detected"),
+        "Inventory: {} directories, {} files".format(
+            description.directories, description.files
+        ),
+        "Top-level sections:",
+    ]
+    lines.extend("- {} {}".format(name, summary) for name, summary in description.sections)
+    return "\n".join(lines)
 
 
 def check_formatting(root: Path) -> list[Finding]:
@@ -180,6 +262,45 @@ def check_folder_descriptions(root: Path) -> list[Finding]:
     return findings
 
 
+def check_folder_indexes(root: Path) -> list[Finding]:
+    """Ensure a folder descriptor names each direct visible subfolder."""
+    findings: list[Finding] = []
+    directories = [
+        path
+        for path in sorted(root.rglob("*"))
+        if path.is_dir()
+        and not _is_ignored(path, root)
+        and not any(part.startswith(".") for part in path.relative_to(root).parts)
+    ]
+    for directory in directories:
+        children = [
+            child
+            for child in sorted(directory.iterdir())
+            if child.is_dir()
+            and not child.name.startswith(".")
+            and not _is_ignored(child, root)
+        ]
+        if not children:
+            continue
+        candidates = (directory / "README.md", directory / (directory.name + ".md"))
+        descriptor = next((path for path in candidates if path.is_file()), None)
+        if descriptor is None:
+            continue  # check_folder_descriptions reports the primary problem.
+        text = _read_text(descriptor) or ""
+        for child in children:
+            marker = child.name + "/"
+            if marker not in text:
+                findings.append(
+                    Finding(
+                        "unlisted-subfolder",
+                        descriptor.relative_to(root).as_posix(),
+                        0,
+                        "list direct subfolder {!r}".format(marker),
+                    )
+                )
+    return findings
+
+
 def check_stale_placeholders(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     for path in iter_files(root):
@@ -220,18 +341,8 @@ def check_canonical_names(root: Path) -> list[Finding]:
 
 def check_branch_references(root: Path) -> list[Finding]:
     """Flag stale Arena branch identifiers in Markdown when Git is available."""
-    try:
-        result = subprocess.run(
-            ["git", "branch", "--show-current"],
-            cwd=str(root),
-            check=True,
-            capture_output=True,
-            text=True,
-        )
-    except (OSError, subprocess.CalledProcessError):
-        return []
-    branch = result.stdout.strip()
-    if not branch.startswith("arena/"):
+    branch = _current_branch(root)
+    if not branch or not branch.startswith("arena/"):
         return []
 
     pattern = re.compile(r"arena/[A-Za-z0-9._/-]+")
@@ -259,6 +370,7 @@ def verify(root: Path) -> list[Finding]:
     checks = (
         check_markdown_links,
         check_folder_descriptions,
+        check_folder_indexes,
         check_stale_placeholders,
         check_canonical_names,
         check_branch_references,
@@ -318,6 +430,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--format", choices=("text", "json"), default="text", help="stdout format")
     parser.add_argument("--report", type=Path, help="write a Markdown report to this path")
     parser.add_argument(
+        "--describe",
+        action="store_true",
+        help="print a repository inventory derived from the working copy",
+    )
+    parser.add_argument(
         "--interactive",
         action="store_true",
         help="prompt the developer about report generation (requires a TTY)",
@@ -336,9 +453,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
 
     findings = verify(root)
+    description = describe_repository(root) if args.describe else None
     if args.format == "json":
-        print(json.dumps([asdict(finding) for finding in findings], indent=2))
+        payload: object = [asdict(finding) for finding in findings]
+        if description:
+            payload = {
+                "description": asdict(description),
+                "findings": [asdict(finding) for finding in findings],
+            }
+        print(json.dumps(payload, indent=2))
     else:
+        if description:
+            print(description_text(description))
+            print()
         print(text_report(findings, root))
 
     report_path = args.report

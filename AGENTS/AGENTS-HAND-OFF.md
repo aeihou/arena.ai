@@ -12,8 +12,7 @@ copy:
 ```sh
 git fetch origin
 git status --short --branch
-find . -path ./.git -prune -o -type f -print | sort
-python3 SRC/tools/self_consistency.py
+python3 SRC/tools/self_consistency.py --describe
 ```
 
 When asked to check broadly for updates, inspect other remote Arena branches and

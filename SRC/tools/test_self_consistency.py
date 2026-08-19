@@ -37,6 +37,34 @@ class VerifierTests(unittest.TestCase):
         self.assertIn("broken-link", codes)
         self.assertIn("missing-folder-description", codes)
 
+    def test_reports_unlisted_direct_subfolder(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        docs = root / "DOCS"
+        child = docs / "PLAN"
+        child.mkdir(parents=True)
+        (docs / "README.md").write_text("# DOCS\n", encoding="utf-8")
+        (child / "README.md").write_text("# PLAN\n", encoding="utf-8")
+
+        findings = verifier.verify(root)
+
+        self.assertTrue(any(finding.code == "unlisted-subfolder" for finding in findings))
+
+    def test_describes_repository_from_working_copy(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        section = root / "SRC"
+        section.mkdir()
+        (section / "README.md").write_text(
+            "# SRC\n\nSource workspaces.\n", encoding="utf-8"
+        )
+
+        description = verifier.describe_repository(root)
+
+        self.assertEqual(root.name, description.name)
+        self.assertIn(("SRC/", "Source workspaces."), description.sections)
+        self.assertEqual(2, description.files)
+
     def test_reports_formatting_and_stale_placeholder(self) -> None:
         temporary, root = self.make_repo()
         self.addCleanup(temporary.cleanup)

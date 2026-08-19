@@ -4,6 +4,9 @@
 
 ### Update GitHub `aeihou/arena.ai`
 ### `self.consistency.selfDescribe()`
+Run `python3 SRC/tools/self_consistency.py --describe` to derive the current
+branch, inventory, and top-level purposes from the working copy.
+
 ### `self.consistency.verify()`
 Run `python3 SRC/tools/self_consistency.py` and resolve every finding. Use
 `--interactive` when working with a developer or `--report PATH` when a durable
