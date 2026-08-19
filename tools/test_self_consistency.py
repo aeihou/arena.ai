@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""Unit tests for the self-consistency verifier."""
+
+from __future__ import annotations
+
+import tempfile
+import unittest
+from pathlib import Path
+
+import self_consistency as verifier
+
+
+class VerifierTests(unittest.TestCase):
+    def make_repo(self) -> tuple[tempfile.TemporaryDirectory[str], Path]:
+        temporary = tempfile.TemporaryDirectory()
+        root = Path(temporary.name)
+        (root / "README.md").write_text("# Test\n", encoding="utf-8")
+        return temporary, root
+
+    def test_clean_repository_passes(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        section = root / "DOCS"
+        section.mkdir()
+        (section / "README.md").write_text("# DOCS\n\nSee [root](../README.md).\n", encoding="utf-8")
+
+        self.assertEqual([], verifier.verify(root))
+
+    def test_reports_broken_link_and_undescribed_folder(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        (root / "README.md").write_text("[missing](nowhere.md)\n", encoding="utf-8")
+        (root / "EMPTY").mkdir()
+
+        codes = {finding.code for finding in verifier.verify(root)}
+
+        self.assertIn("broken-link", codes)
+        self.assertIn("missing-folder-description", codes)
+
+    def test_reports_formatting_and_stale_placeholder(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        folder = root / "SRC"
+        folder.mkdir()
+        (folder / "README.md").write_text("# SRC \n", encoding="utf-8")
+        (folder / ".gitkeep").touch()
+        (root / "note.txt").write_text("no newline", encoding="utf-8")
+
+        codes = {finding.code for finding in verifier.verify(root)}
+
+        self.assertIn("trailing-whitespace", codes)
+        self.assertIn("missing-final-newline", codes)
+        self.assertIn("stale-gitkeep", codes)
+
+    def test_reports_noncanonical_name(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        wrong_name = "AW" + "IHOU"
+        (root / "README.md").write_text("# " + wrong_name + "\n", encoding="utf-8")
+
+        findings = verifier.verify(root)
+
+        self.assertTrue(any(finding.code == "noncanonical-name" for finding in findings))
+
+    def test_markdown_report_contains_actionable_table(self) -> None:
+        finding = verifier.Finding("broken-link", "README.md", 3, "missing destination")
+
+        report = verifier.markdown_report([finding], Path("/repo"))
+
+        self.assertIn("Result: **FAIL**", report)
+        self.assertIn("`README.md:3`", report)
+        self.assertIn("`broken-link`", report)
+
+
+if __name__ == "__main__":
+    unittest.main()
