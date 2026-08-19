@@ -10,10 +10,10 @@ Workspace of **AWIHOU and his pet AIbOT**.
 |----------|------------------------------|-----------------|
 | `AGENTS` | AI instructions & agent docs | `README.md`     |
 | `AEIHOU` | Owner (AEIHOU) docs          | `AEIHOU.md`     |
-| `PG01`   | Playground 01             | —               |
-| `DOCS`   | Documentation                | —               |
+| `PG01`   | Playground 01                | `README.md`     |
+| `DOCS`   | Documentation                | `README.md`     |
 | `SRC`    | Source / workspaces          | `SRC.README.md` |
-| `GITHUB` | GitHub-related files         | —               |
+| `GITHUB` | GitHub-related files         | `README.md`     |
 
 
 ## README.md 
