@@ -22,7 +22,8 @@ from the working copy instead of maintaining a duplicated static tree.
 ```text
 arena.ai/
 ├── AEIHOU/                  owner context
-├── AGENTS/                  authoritative instructions and slim hand-off
+├── AGENTS/
+│   └── HAND-OFF/            smart, minimal inter-session context
 ├── DOCS/PLAN/               plans and decision records
 ├── GITHUB/                  inactive GitHub templates
 ├── PG01/                    undefined playground; no premature scaffolding

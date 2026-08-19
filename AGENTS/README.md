@@ -1,8 +1,19 @@
 # AI instructions
 
+Authoritative operating instructions for Arena agents.
+
+Subfolders:
+- [`HAND-OFF/`](HAND-OFF/) — concise state and learned constraints for the next
+  agent.
+
 ## EverytimeBeforeThink
 
 ### Update GitHub `aeihou/arena.ai`
+
+### Reload hand-off
+Read [`HAND-OFF/README.md`](HAND-OFF/README.md), infer semantic intent, and
+continue from current repository reality.
+
 ### `self.consistency.selfDescribe()`
 Run `python3 SRC/tools/self_consistency.py --describe` to derive the current
 branch, inventory, and top-level purposes from the working copy.

@@ -1,8 +1,8 @@
 # Agent hand-off
 
 Smart, minimal session context for the next agent. Authoritative operating rules
-remain in [`README.md`](README.md); plans remain in
-[`../DOCS/PLAN/README.md`](../DOCS/PLAN/README.md).
+remain in [`AGENTS/README.md`](../README.md); plans remain in
+[`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md).
 
 ## Reload and self-describe
 
@@ -41,9 +41,11 @@ infer semantic intent. Do not copy malformed, stale, or branch-specific text.
 - Use canonical repository names, valid local Markdown links, clean text
   formatting, and no stale placeholders.
 
-## Next decisions
+## Current decision state
 
-1. Decide the purpose and internal layout of `PG01` with the developer.
-2. Activate the GitHub Actions template when workflow permissions are available.
-3. Keep plans and this hand-off short, current, and derived from repository
-   reality.
+- **Pending:** activate the GitHub Actions template when workflow permissions
+  are available.
+- **Deferred:** keep `PG01` minimal until the developer chooses a concrete
+  purpose.
+- **Continuous:** keep plans and this hand-off short, current, and derived from
+  repository reality.

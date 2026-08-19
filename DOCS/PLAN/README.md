@@ -27,6 +27,9 @@ applied.
 - **Smart self-description** — added repository-derived branch, inventory, and
   top-level purpose output to the verifier; parent documentation now indexes
   each direct visible subfolder.
+- **Hand-off normalization** — moved inter-session context to the self-describing
+  `AGENTS/HAND-OFF/README.md` path and made its pending/deferred state consistent
+  with this plan.
 
 ## Self-consistency report generation
 
