@@ -6,7 +6,7 @@
 
 ## 1. What this repo is
 
-`aeihou/arena.ai` — workspace of **AEIHOU and his pet AIbOT**. It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding.
+`aeihou/arena.ai` —  It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding.
 ## 2. Operating rules (CheckFirst → `AGENTS/README.md`)
 
 Before anything else, **always fetch GitHub first** (`git fetch origin
@@ -19,7 +19,7 @@ Before anything else, **always fetch GitHub first** (`git fetch origin
 
 ### EverytimeAfterThink
 - `commit`
-- `push to GitHub aeihou/arena.ai arena'sbranch`
+- `push to GitHub 
 
 ### Any questions? → `askUser`
 Never make structural decisions without asking first. The user answers interactively (often shorthand like `1y,2y,3y` = approve items 1–3, `n` = no).
@@ -50,7 +50,7 @@ arena.ai/
 - **After responding**: `git add -A && git commit` → fetch again → push; if remote advanced, `git rebase FETCH_HEAD` then push.
 - **Conflict resolution**: the user's GitHub edits are **authoritative**. Use `git checkout --ours <file>` for files the user changed, keep your changes only where they don't collide. Resume with `GIT_EDITOR=true git rebase --continue`.
 - **Tracking fix**: the repo's original fetch refspec only tracked `main`; it now tracks all branches (`+refs/heads/*:refs/remotes/origin/*`). Keep it that way.
-- **No PRs** unless explicitly asked. Push directly to `arena/01a01939-arena-ai`.
+- **No PRs** unless explicitly asked.
 
 ### Self-consistency verification (self.consistency.verify)
 - Check for **broken links** (markdown refs to non-existent files).
