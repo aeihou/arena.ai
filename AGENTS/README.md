@@ -17,6 +17,10 @@ Run `python3 SRC/tools/self_consistency.py --describe` to derive the current
 branch, inventory counts, top-level purposes, and complete file list from the
 working copy.
 
+### Load tracked session context
+Read [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](HAND-OFF/SESSION_CONTEXT.md) for the
+latest semantic outcome, decisions, validation, blockers, and next actions.
+
 ### `self.consistency.verify()`
 Run `python3 SRC/tools/self_consistency.py` and resolve every finding. Use
 `--interactive` to preview grouped safe fixes for developer approval, or
@@ -29,7 +33,11 @@ changes, and ask the developer before applying structural decisions.
 
 ## EverytimeAfterThink
 
-- Commit.
+- For meaningful changes, refresh
+  [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](HAND-OFF/SESSION_CONTEXT.md) and append
+  one compact entry to
+  [`AGENTS/HAND-OFF/SESSION_LOG.md`](HAND-OFF/SESSION_LOG.md).
+- Commit implementation and context together.
 - Push to GitHub `GitHub_User/repo` on the current `branch`.
 
 ## Any questions?

@@ -2,8 +2,9 @@
 
 # Agent hand-off
 
-Smart, minimal session context for the next agent. Authoritative operating rules
-remain in [`AGENTS/README.md`](../README.md); plans remain in
+Stable, portable hand-off rules for the next agent. Current semantic state lives
+in [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](SESSION_CONTEXT.md), authoritative
+operating rules remain in [`AGENTS/README.md`](../README.md), and plans remain in
 [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md).
 
 ## Portable identifiers
@@ -40,6 +41,15 @@ semantic intent. Do not copy malformed, stale, or branch-specific text.
   the current GitHub connection cannot install workflow files.
 - Plan status is indexed in [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md);
   details and acceptance criteria live in each plan subfolder.
+
+## Tracked session state
+
+- Rewrite [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](SESSION_CONTEXT.md) with the
+  latest semantic state after every meaningful completed change.
+- Append one concise outcome to
+  [`AGENTS/HAND-OFF/SESSION_LOG.md`](SESSION_LOG.md) in the same commit.
+- Use Git history for old rolling-context versions; keep the log compact.
+- Derive runtime metadata rather than recording it.
 
 ## Learned constraints
 

@@ -8,6 +8,7 @@ Subfolders:
 - [`DOCS/PLAN/FILE_STRUCTURE/README.md`](FILE_STRUCTURE/README.md) — completed repository-structure optimization.
 - [`DOCS/PLAN/PORTABLE_HAND_OFF/README.md`](PORTABLE_HAND_OFF/README.md) — completed portable agent-context plan.
 - [`DOCS/PLAN/INTERACTIVE_FIXER/README.md`](INTERACTIVE_FIXER/README.md) — completed grouped safe-fix interaction plan.
+- [`DOCS/PLAN/SESSION_CONTEXT/README.md`](SESSION_CONTEXT/README.md) — completed next-agent context tracking plan.
 - [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) — blocked CI activation plan.
 - [`DOCS/PLAN/PG01/README.md`](PG01/README.md) — deferred playground definition plan.
 
@@ -29,6 +30,7 @@ Subfolders:
 | [`DOCS/PLAN/FILE_STRUCTURE/README.md`](FILE_STRUCTURE/README.md) | Completed | Preserve the documented conventions. |
 | [`DOCS/PLAN/PORTABLE_HAND_OFF/README.md`](PORTABLE_HAND_OFF/README.md) | Completed | Use its contract when transferring or repairing agent context. |
 | [`DOCS/PLAN/INTERACTIVE_FIXER/README.md`](INTERACTIVE_FIXER/README.md) | Completed | Keep fixes deterministic and developer-approved. |
+| [`DOCS/PLAN/SESSION_CONTEXT/README.md`](SESSION_CONTEXT/README.md) | Completed | Refresh rolling context and append compact outcomes with meaningful changes. |
 | [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) | Blocked | Restore GitHub workflow permission, then activate the template. |
 | [`DOCS/PLAN/PG01/README.md`](PG01/README.md) | Deferred | Ask the developer for a concrete playground purpose. |
 

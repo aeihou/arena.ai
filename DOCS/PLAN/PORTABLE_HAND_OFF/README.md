@@ -3,7 +3,7 @@
 # Portable agent hand-off
 
 - **Status:** Completed
-- **Revision:** 3
+- **Revision:** 4
 - **Updated:** 2026-08-19
 - **Outcome:** Agent context can move between repositories and sessions without
   persisting account, repository, or branch values.
@@ -31,8 +31,12 @@ Each concern has one canonical file:
 
 - Operating instructions:
   [`AGENTS/README.md`](../../../AGENTS/README.md)
-- Inter-session state and learned constraints:
+- Stable hand-off rules and learned constraints:
   [`AGENTS/HAND-OFF/README.md`](../../../AGENTS/HAND-OFF/README.md)
+- Rolling next-agent state:
+  [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](../../../AGENTS/HAND-OFF/SESSION_CONTEXT.md)
+- Compact semantic history:
+  [`AGENTS/HAND-OFF/SESSION_LOG.md`](../../../AGENTS/HAND-OFF/SESSION_LOG.md)
 - Plan statuses and next actions:
   [`DOCS/PLAN/README.md`](../README.md)
 - Verifier behavior and local usage:
@@ -48,13 +52,16 @@ Do not duplicate a source of truth. Link to it by repository-relative file name.
 2. Read [`AGENTS/README.md`](../../../AGENTS/README.md).
 3. Run `python3 SRC/tools/self_consistency.py --describe` to discover every file
    as well as repository purpose and counts.
-4. Read the files relevant to the task. Include
-   [`AGENTS/HAND-OFF/README.md`](../../../AGENTS/HAND-OFF/README.md) when
-   continuing inter-session state.
-5. Run `python3 SRC/tools/self_consistency.py` and resolve findings.
-6. Read [`DOCS/PLAN/README.md`](../README.md) for blocked, deferred, and active
+4. Read
+   [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](../../../AGENTS/HAND-OFF/SESSION_CONTEXT.md)
+   for the latest semantic continuation state.
+5. Read other files relevant to the task. Include
+   [`AGENTS/HAND-OFF/README.md`](../../../AGENTS/HAND-OFF/README.md) when stable
+   hand-off constraints are needed.
+6. Run `python3 SRC/tools/self_consistency.py` and resolve findings.
+7. Read [`DOCS/PLAN/README.md`](../README.md) for blocked, deferred, and active
    decisions.
-7. Use `askDev` before structural changes or when intent remains ambiguous.
+8. Use `askDev` before structural changes or when intent remains ambiguous.
 
 ## Rebuild procedure
 
@@ -150,8 +157,12 @@ When this contract changes:
 2. Update the canonical implementation or instruction file.
 3. Add or update verifier tests when the rule is machine-checkable.
 4. Run the validation sequence.
-5. Update the parent plan registry if status or next action changes.
-6. Commit and push only on the current `branch`.
+5. Refresh
+   [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](../../../AGENTS/HAND-OFF/SESSION_CONTEXT.md)
+   and append the compact semantic outcome to
+   [`AGENTS/HAND-OFF/SESSION_LOG.md`](../../../AGENTS/HAND-OFF/SESSION_LOG.md).
+6. Update the parent plan registry if status or next action changes.
+7. Commit and push only on the current `branch`.
 
 ## Decision history
 
@@ -162,3 +173,5 @@ When this contract changes:
   validation sequence, and change protocol.
 - **Revision 3:** made self-description enumerate the complete relevant file set
   and changed loading from a hardcoded hand-off step to task-driven discovery.
+- **Revision 4:** added rolling semantic session context and a compact append-only
+  outcome log, both updated with every meaningful change.
