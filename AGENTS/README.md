@@ -1,1 +1,3 @@
-readme file
+# AGENTS
+
+AI instructions & agent docs.
