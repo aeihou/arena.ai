@@ -61,12 +61,13 @@ derived rather than recorded here.
   the root README links without duplicating them.
 - **Validation:** Self-consistency and Git whitespace checks pass.
 
-## 2026-08-19 — Active self-describing repository goal
+## 2026-08-19 — Self-consistency update and sync to remote
 
-- **Revision:** 7
-- **Outcome:** Established the repository north star and added dynamic directory
-  and descriptor discovery to self-description.
-- **Decisions:** Future growth must update canonical descriptors, registries,
-  context, focused tests, and validation without static inventories.
-- **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
-  checks pass.
+- **Revision:** 8
+- **Outcome:** Verified repository consistency (zero findings), ran full test
+  suite (16/16 passed), updated session tracking for revision 8, and pushed
+  working branch to origin.
+- **Decisions:** None — routine self-consistency update and sync, no structural
+  or behavioral changes.
+- **Validation:** Self-consistency, full test suite, Python grammar, and Git
+  whitespace checks pass.

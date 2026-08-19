@@ -1,17 +1,14 @@
 # Rolling session context
 
 - **Updated:** 2026-08-19
-- **Log revision:** 7
+- **Log revision:** 8
 - **Purpose:** Minimal semantic state for the next agent.
 
 ## Latest outcome
 
-- Established a durable active goal: self-description, portable session hand-off,
-  dynamic growth, and machine-enforced consistency.
-- Extended self-description to enumerate every relevant directory and its
-  canonical descriptor as well as every relevant file.
-- Added a growth protocol that couples structure, descriptors, registries,
-  context, tests, and validation.
+- Executed self-consistency update and sync to remote: verified repository
+  consistency, ran full test suite (16/16 pass), updated session tracking for
+  revision 8, and pushed to origin.
 
 ## Current state
 
