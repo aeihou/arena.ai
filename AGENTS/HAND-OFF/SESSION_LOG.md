@@ -70,3 +70,13 @@ derived rather than recorded here.
   context, focused tests, and validation without static inventories.
 - **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
   checks pass.
+
+## 2026-08-19 — Folder-and-README growth script
+
+- **Revision:** 8
+- **Outcome:** Added a self-executing script that creates a named folder, writes
+  its canonical README, and updates the parent descriptor listing.
+- **Decisions:** Keep growth portable and convention-aware; require explicit
+  approval before creating a top-level folder.
+- **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
+  checks pass.

@@ -28,6 +28,21 @@ including `directory_paths`, `directory_descriptors`, and `file_paths`.
 Interactive prompts default to No and never delete files or alter directory
 structure.
 
+## Folder growth
+
+Create a named folder and its canonical README from the repository root:
+
+```sh
+python3 SRC/tools/new_folder.py path/to/NameOfFolder
+python3 SRC/tools/new_folder.py path/to/NameOfFolder --summary "Short purpose."
+python3 SRC/tools/new_folder.py NameOfFolder --approve-structure
+```
+
+The script makes the directory, writes `README.md` with the required
+repository-absolute first line, and lists the child in the parent descriptor.
+Top-level folders are structural and require `--approve-structure`. Exit status
+is `0` for success and `2` for a rejected request.
+
 ## Enforced rules
 
 The verifier checks local links, README contracts, folder indexes, placeholders,

@@ -1,17 +1,14 @@
 # Rolling session context
 
 - **Updated:** 2026-08-19
-- **Log revision:** 7
+- **Log revision:** 8
 - **Purpose:** Minimal semantic state for the next agent.
 
 ## Latest outcome
 
-- Established a durable active goal: self-description, portable session hand-off,
-  dynamic growth, and machine-enforced consistency.
-- Extended self-description to enumerate every relevant directory and its
-  canonical descriptor as well as every relevant file.
-- Added a growth protocol that couples structure, descriptors, registries,
-  context, tests, and validation.
+- Added a self-executing growth script that creates a named folder, writes its
+  canonical README, and lists the child in the parent descriptor.
+- Top-level folders still require explicit structural approval.
 
 ## Current state
 
@@ -19,6 +16,7 @@
 - Active goal:
   [`DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md`](../../DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md)
 - Plan status: [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md)
+- Tool usage: [`SRC/tools/README.md`](../../SRC/tools/README.md)
 - Historical outcomes: [`AGENTS/HAND-OFF/SESSION_LOG.md`](SESSION_LOG.md)
 
 ## Validation baseline
@@ -31,5 +29,7 @@
 
 1. Follow [`AGENTS/README.md`](../README.md).
 2. Use the active self-describing-repository goal to prioritize optimizations.
-3. Preserve dynamic discovery; do not introduce static inventories or duplicated
+3. Use the folder-growth script when adding directories instead of hand-writing
+   the mkdir-and-README step.
+4. Preserve dynamic discovery; do not introduce static inventories or duplicated
    sources of truth.
