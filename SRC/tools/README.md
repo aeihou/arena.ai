@@ -18,11 +18,16 @@ Derive a smart repository inventory and verify it in one command:
 python3 SRC/tools/self_consistency.py --describe
 ```
 
-For a guided developer prompt and Markdown report:
+For grouped, developer-approved safe fixes followed by an optional Markdown
+report:
 
 ```sh
 python3 SRC/tools/self_consistency.py --interactive
 ```
+
+Interactive mode previews categories and defaults every prompt to No. It can fix
+README full paths, canonical internal README links, trailing whitespace, and
+missing final newlines. It never deletes files or changes directory structure.
 
 For automation, use `--format json` or `--report PATH`. Combine JSON with
 `--describe` to receive an object containing both `description` and `findings`.

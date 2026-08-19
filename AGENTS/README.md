@@ -22,8 +22,8 @@ branch, inventory, and top-level purposes from the working copy.
 
 ### `self.consistency.verify()`
 Run `python3 SRC/tools/self_consistency.py` and resolve every finding. Use
-`--interactive` when working with a developer or `--report PATH` when a durable
-Markdown report is needed.
+`--interactive` to preview grouped safe fixes for developer approval, or
+`--report PATH` when a durable Markdown report is needed.
 
 ### Plan next optimization
 Maintain the registry in [`DOCS/PLAN/README.md`](../DOCS/PLAN/README.md) and the

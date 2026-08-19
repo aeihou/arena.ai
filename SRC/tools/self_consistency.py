@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -454,6 +455,129 @@ def verify(root: Path) -> list[Finding]:
     return sorted(set(findings), key=lambda finding: (finding.path, finding.line, finding.code))
 
 
+def fix_readme_full_paths(root: Path) -> int:
+    """Insert or correct README path declarations; return changed file count."""
+    changed = 0
+    for path in iter_files(root):
+        if path.name != "README.md":
+            continue
+        text = _read_text(path) or ""
+        lines = text.splitlines()
+        expected = "/" + path.relative_to(root).as_posix()
+        if lines and lines[0] == expected:
+            continue
+        had_final_newline = text.endswith("\n")
+        if lines and README_FULL_PATH.fullmatch(lines[0]):
+            lines[0] = expected
+        else:
+            lines = [expected, ""] + lines
+        updated = "\n".join(lines)
+        if had_final_newline and not updated.endswith("\n"):
+            updated += "\n"
+        path.write_text(updated, encoding="utf-8")
+        changed += 1
+    return changed
+
+
+def _canonical_readme_link(match: re.Match[str], path: Path, root: Path) -> str:
+    raw_target = match.group(2).strip()
+    target = _link_target(raw_target)
+    if not target or target.startswith(("#", "/", "mailto:")) or "://" in target:
+        return match.group(0)
+    target_path = target.split("#", 1)[0].split("?", 1)[0]
+    clean_target = unquote(target_path)
+    destination = (path.parent / clean_target).resolve()
+    try:
+        destination.relative_to(root)
+    except ValueError:
+        return match.group(0)
+    if destination.is_dir() and (destination / "README.md").is_file():
+        destination = destination / "README.md"
+    if not destination.is_file():
+        return match.group(0)
+    label = destination.relative_to(root).as_posix()
+    href = Path(os.path.relpath(destination, path.parent)).as_posix()
+    suffix = target[len(target_path) :]
+    return "[`{}`]({}{})".format(label, href, suffix)
+
+
+def fix_readme_links(root: Path) -> int:
+    """Canonicalize internal README links; return changed file count."""
+    changed = 0
+    for path in iter_files(root):
+        if path.name != "README.md":
+            continue
+        text = _read_text(path) or ""
+        updated = README_LINK.sub(
+            lambda match: _canonical_readme_link(match, path, root), text
+        )
+        if updated != text:
+            path.write_text(updated, encoding="utf-8")
+            changed += 1
+    return changed
+
+
+def fix_text_formatting(root: Path) -> int:
+    """Remove trailing whitespace and add final newlines to text files."""
+    changed = 0
+    for path in iter_files(root):
+        text = _read_text(path)
+        if text is None:
+            continue
+        updated = "\n".join(line.rstrip(" \t") for line in text.splitlines())
+        if text or updated:
+            updated += "\n"
+        if updated != text:
+            path.write_text(updated, encoding="utf-8")
+            changed += 1
+    return changed
+
+
+def _confirm(prompt: str) -> bool:
+    return input(prompt + " [y/N] ").strip().lower() in {"y", "yes"}
+
+
+def interactive_safe_fixes(root: Path, findings: Sequence[Finding]) -> list[Finding]:
+    """Preview and apply developer-approved groups of deterministic safe fixes."""
+    groups = (
+        (
+            "README full paths",
+            {"missing-readme-full-path"},
+            fix_readme_full_paths,
+        ),
+        (
+            "README internal links",
+            {"implicit-readme-link", "noncanonical-link-name"},
+            fix_readme_links,
+        ),
+        (
+            "text formatting",
+            {"trailing-whitespace", "missing-final-newline"},
+            fix_text_formatting,
+        ),
+    )
+    print("\nGrouped safe-fix preview")
+    applied = False
+    for name, codes, fixer in groups:
+        count = sum(finding.code in codes for finding in findings)
+        if not count:
+            continue
+        print("- {}: {} finding(s)".format(name, count))
+        if _confirm("Apply {} fixes?".format(name)):
+            changed = fixer(root)
+            print("  changed {} file(s)".format(changed))
+            applied = True
+        else:
+            print("  skipped")
+    if not applied:
+        print("No safe fixes applied.")
+        return list(findings)
+    updated_findings = verify(root)
+    print("\nAfter approved fixes:")
+    print(text_report(updated_findings, root))
+    return updated_findings
+
+
 def text_report(findings: Sequence[Finding], root: Path) -> str:
     if not findings:
         return "Self-consistency verification passed: no findings."
@@ -509,7 +633,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--interactive",
         action="store_true",
-        help="prompt the developer about report generation (requires a TTY)",
+        help="prompt for grouped safe fixes and report generation (requires a TTY)",
     )
     return parser
 
@@ -522,6 +646,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
     if args.interactive and not sys.stdin.isatty():
         print("error: --interactive requires a terminal", file=sys.stderr)
+        return 2
+    if args.interactive and args.format == "json":
+        print("error: --interactive cannot be combined with --format json", file=sys.stderr)
         return 2
 
     findings = verify(root)
@@ -539,6 +666,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(description_text(description))
             print()
         print(text_report(findings, root))
+
+    if args.interactive:
+        findings = interactive_safe_fixes(root, findings)
 
     report_path = args.report
     if args.interactive:

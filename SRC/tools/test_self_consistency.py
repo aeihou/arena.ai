@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import self_consistency as verifier
 
@@ -40,6 +41,33 @@ class VerifierTests(unittest.TestCase):
         self.assertTrue(
             any(finding.code == "missing-readme-full-path" for finding in findings)
         )
+
+    def test_safe_fix_groups_restore_consistency(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        docs = root / "DOCS"
+        docs.mkdir()
+        (docs / "README.md").write_text("# DOCS \n", encoding="utf-8")
+        (root / "README.md").write_text("/README.md\n\nSee [docs](DOCS/).", encoding="utf-8")
+
+        self.assertEqual(1, verifier.fix_readme_full_paths(root))
+        self.assertEqual(1, verifier.fix_readme_links(root))
+        self.assertEqual(2, verifier.fix_text_formatting(root))
+        self.assertEqual([], verifier.verify(root))
+
+    def test_interactive_safe_fixes_use_grouped_approval(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        docs = root / "DOCS"
+        docs.mkdir()
+        (docs / "README.md").write_text("# DOCS \n", encoding="utf-8")
+        (root / "README.md").write_text("/README.md\n\nSee [docs](DOCS/).", encoding="utf-8")
+
+        with patch("builtins.input", side_effect=["y", "y", "y"]) as prompt:
+            findings = verifier.interactive_safe_fixes(root, verifier.verify(root))
+
+        self.assertEqual(3, prompt.call_count)
+        self.assertEqual([], findings)
 
     def test_reports_broken_link_and_undescribed_folder(self) -> None:
         temporary, root = self.make_repo()
