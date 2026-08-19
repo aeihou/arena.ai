@@ -1,6 +1,10 @@
-read me arena.ai # arena.ai
-
+#EverytimeBeforeThinking
+   #SYNCH WITH GitHub $[USER_GOTHUB]/arena.ai
+     #Update Repo
+     #RELOAD Readme files
+     
+MY REPO FOLDER STRUCTURE 
+|
 AGENTS
 AGENTS FOLDER
-AGENTS.md file readBeforeEveryResponse
-SYNCH WITH GitHub #BeforeEveryResponse
+AGENTS.md file
