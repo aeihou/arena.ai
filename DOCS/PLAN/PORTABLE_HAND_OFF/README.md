@@ -26,7 +26,8 @@ copying stale identity or branch state.
 ## Acceptance criteria
 
 - Agent documentation contains no embedded account, repository, or branch value.
-- The hand-off links to authoritative instructions and the plan registry.
+- The hand-off links to authoritative instructions and the plan registry using
+  repository-relative linked file names.
 - Repository self-description and verification pass from the root.
 - The hand-off distinguishes blocked and deferred work without duplicating full
   plan details.

@@ -25,7 +25,8 @@ python3 SRC/tools/self_consistency.py --interactive
 For automation, use `--format json` or `--report PATH`. Combine JSON with
 `--describe` to receive an object containing both `description` and `findings`.
 The verifier also ensures visible direct subfolders are indexed by their parent
-folder documentation and prevents the current branch value from leaking into
+folder documentation, internal README links display repository-relative file
+names and target files directly, and the current branch value does not leak into
 portable Markdown. The command exits with
 status `0` when all checks pass, `1` when findings exist, and `2` for usage or
 environment errors.

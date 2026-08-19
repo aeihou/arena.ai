@@ -49,6 +49,7 @@ TEXT_SUFFIXES = {
     ".yml",
 }
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
+README_LINK = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)]+)\)")
 # Keep generic typo policy data out of documentation so describing the checker
 # does not make the checker report itself. Repository-specific identity belongs
 # to the working copy, not this portable verifier.
@@ -232,6 +233,53 @@ def check_markdown_links(root: Path) -> list[Finding]:
     return findings
 
 
+def check_readme_link_names(root: Path) -> list[Finding]:
+    """Require internal README links to display and target the linked file."""
+    findings: list[Finding] = []
+    for path in iter_files(root):
+        if path.name != "README.md":
+            continue
+        text = _read_text(path) or ""
+        for number, line in enumerate(text.splitlines(), 1):
+            for match in README_LINK.finditer(line):
+                label = match.group(1).strip().strip("`")
+                target = _link_target(match.group(2))
+                if not target or target.startswith(("#", "/", "mailto:")) or "://" in target:
+                    continue
+                clean_target = unquote(target.split("#", 1)[0].split("?", 1)[0])
+                destination = (path.parent / clean_target).resolve()
+                try:
+                    destination.relative_to(root)
+                except ValueError:
+                    continue
+                linked_file = destination
+                if destination.is_dir() and (destination / "README.md").is_file():
+                    linked_file = destination / "README.md"
+                    findings.append(
+                        Finding(
+                            "implicit-readme-link",
+                            path.relative_to(root).as_posix(),
+                            number,
+                            "link directly to {}".format(
+                                linked_file.relative_to(root).as_posix()
+                            ),
+                        )
+                    )
+                if not linked_file.is_file():
+                    continue
+                expected = linked_file.relative_to(root).as_posix()
+                if label != expected:
+                    findings.append(
+                        Finding(
+                            "noncanonical-link-name",
+                            path.relative_to(root).as_posix(),
+                            number,
+                            "use linked file name {!r} as link text".format(expected),
+                        )
+                    )
+    return findings
+
+
 def check_folder_descriptions(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     directories = [root]
@@ -364,6 +412,7 @@ def check_branch_references(root: Path) -> list[Finding]:
 def verify(root: Path) -> list[Finding]:
     checks = (
         check_markdown_links,
+        check_readme_link_names,
         check_folder_descriptions,
         check_folder_indexes,
         check_stale_placeholders,

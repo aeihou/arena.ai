@@ -3,4 +3,4 @@
 Documentation folder.
 
 Subfolders:
-- [`PLAN/`](PLAN/) — canonical plan registry and detailed decision records.
+- [`DOCS/PLAN/README.md`](PLAN/README.md) — canonical plan registry and detailed decision records.

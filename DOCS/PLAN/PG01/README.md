@@ -10,7 +10,7 @@ Define `PG01` from an actual workflow rather than speculative scaffolding.
 
 ## Constraints
 
-- Keep [`PG01/`](../../../PG01/) minimal while this plan is deferred.
+- Keep [`PG01/README.md`](../../../PG01/README.md) minimal while this plan is deferred.
 - Do not create source, documentation, fixture, or configuration subfolders
   before their use is known.
 - Reuse repository-wide maintenance tools instead of duplicating them inside the

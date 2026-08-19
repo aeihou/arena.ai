@@ -23,7 +23,9 @@ class VerifierTests(unittest.TestCase):
         self.addCleanup(temporary.cleanup)
         section = root / "DOCS"
         section.mkdir()
-        (section / "README.md").write_text("# DOCS\n\nSee [root](../README.md).\n", encoding="utf-8")
+        (section / "README.md").write_text(
+            "# DOCS\n\nSee [`README.md`](../README.md).\n", encoding="utf-8"
+        )
 
         self.assertEqual([], verifier.verify(root))
 
@@ -37,6 +39,19 @@ class VerifierTests(unittest.TestCase):
 
         self.assertIn("broken-link", codes)
         self.assertIn("missing-folder-description", codes)
+
+    def test_reports_noncanonical_readme_link_name_and_directory_target(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        docs = root / "DOCS"
+        docs.mkdir()
+        (docs / "README.md").write_text("# DOCS\n", encoding="utf-8")
+        (root / "README.md").write_text("See [docs](DOCS/).\n", encoding="utf-8")
+
+        codes = {finding.code for finding in verifier.verify(root)}
+
+        self.assertIn("implicit-readme-link", codes)
+        self.assertIn("noncanonical-link-name", codes)
 
     def test_reports_unlisted_direct_subfolder(self) -> None:
         temporary, root = self.make_repo()

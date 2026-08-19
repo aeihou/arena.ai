@@ -3,10 +3,10 @@
 Canonical registry for repository plans and decision records.
 
 Subfolders:
-- [`FILE_STRUCTURE/`](FILE_STRUCTURE/) — completed repository-structure optimization.
-- [`PORTABLE_HAND_OFF/`](PORTABLE_HAND_OFF/) — completed portable agent-context plan.
-- [`CONTINUOUS_VERIFICATION/`](CONTINUOUS_VERIFICATION/) — blocked CI activation plan.
-- [`PG01/`](PG01/) — deferred playground definition plan.
+- [`DOCS/PLAN/FILE_STRUCTURE/README.md`](FILE_STRUCTURE/README.md) — completed repository-structure optimization.
+- [`DOCS/PLAN/PORTABLE_HAND_OFF/README.md`](PORTABLE_HAND_OFF/README.md) — completed portable agent-context plan.
+- [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) — blocked CI activation plan.
+- [`DOCS/PLAN/PG01/README.md`](PG01/README.md) — deferred playground definition plan.
 
 ## Status model
 
@@ -23,10 +23,10 @@ Subfolders:
 
 | Plan | Status | Next action |
 |---|---|---|
-| [File-structure optimization](FILE_STRUCTURE/) | Completed | Preserve the documented conventions. |
-| [Portable agent hand-off](PORTABLE_HAND_OFF/) | Completed | Preserve derived identifiers and concise context. |
-| [Continuous verification](CONTINUOUS_VERIFICATION/) | Blocked | Restore GitHub workflow permission, then activate the template. |
-| [PG01 definition](PG01/) | Deferred | Ask the developer for a concrete playground purpose. |
+| [`DOCS/PLAN/FILE_STRUCTURE/README.md`](FILE_STRUCTURE/README.md) | Completed | Preserve the documented conventions. |
+| [`DOCS/PLAN/PORTABLE_HAND_OFF/README.md`](PORTABLE_HAND_OFF/README.md) | Completed | Preserve derived identifiers and concise context. |
+| [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) | Blocked | Restore GitHub workflow permission, then activate the template. |
+| [`DOCS/PLAN/PG01/README.md`](PG01/README.md) | Deferred | Ask the developer for a concrete playground purpose. |
 
 ## Maintenance rules
 

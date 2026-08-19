@@ -48,14 +48,16 @@ semantic intent. Do not copy malformed, stale, or branch-specific text.
 - Keep `AGENTS/README.md` as the single source of operating instructions; do not
   duplicate its full workflow here.
 - Every visible directory self-describes with `README.md` or `<NAME>.md`.
+- In every `README.md`, internal links display the repository-relative linked
+  file name and target that file directly.
 - Use canonical repository names, valid local Markdown links, clean text
   formatting, and no stale placeholders.
 
 ## Current decision state
 
-- **Blocked:** [continuous verification](../../DOCS/PLAN/CONTINUOUS_VERIFICATION/)
+- **Blocked:** [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](../../DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md)
   awaits GitHub workflow permission.
-- **Deferred:** [PG01 definition](../../DOCS/PLAN/PG01/) awaits a concrete
+- **Deferred:** [`DOCS/PLAN/PG01/README.md`](../../DOCS/PLAN/PG01/README.md) awaits a concrete
   developer-selected purpose.
 - **Continuous:** keep the plan registry, detailed plan status, and this hand-off
   short and consistent with repository reality.
