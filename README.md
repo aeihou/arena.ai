@@ -2,7 +2,7 @@
 
 Workspace of **AEIHOU and his pet AIbOT**.
 
-> 🤖 AI agent instructions (sync rules, createPR confirmation) live in [`AGENTS.md`](AGENTS.md).
+> 🤖 AI agent instructions (sync rules, createPR confirmation) live in [`AGENTS/README.md`](AGENTS/README.md).
 
 ## Folder structure
 
