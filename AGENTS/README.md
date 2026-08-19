@@ -30,6 +30,6 @@ before applying structural decisions.
 ## EverytimeAfterThink
 
 - Commit.
-- Push to GitHub `GitHub_User/repo` on Arena's branch.
+- Push to GitHub `GitHub_User/repo` on the current `branch`.
 
 Any questions? `askDev`.

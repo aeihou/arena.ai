@@ -30,15 +30,15 @@ applied.
 - **Hand-off normalization** — moved inter-session context to the self-describing
   `AGENTS/HAND-OFF/README.md` path and made its pending/deferred state consistent
   with this plan.
-- **Portable identifiers** — replaced embedded account and repository names in
-  agent instructions with `GitHub_User/repo`; the hand-off resolves real values
+- **Portable identifiers** — replaced embedded account, repository, and branch
+  values with `GitHub_User/repo` and `branch`; the hand-off resolves real values
   from Git and the working copy.
 
 ## Self-consistency report generation
 
 The portable verifier checks local Markdown links, canonical names, directory
-self-description and child indexes, stale `.gitkeep` files, current Arena branch
-references, and text formatting. Derive a current repository description with:
+self-description and child indexes, stale `.gitkeep` files, hardcoded current
+branch values, and text formatting. Derive a current repository description with:
 
 ```sh
 python3 SRC/tools/self_consistency.py --describe

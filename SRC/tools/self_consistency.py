@@ -338,29 +338,26 @@ def check_canonical_names(root: Path) -> list[Finding]:
 
 
 def check_branch_references(root: Path) -> list[Finding]:
-    """Flag stale Arena branch identifiers in Markdown when Git is available."""
+    """Prevent the current branch value from leaking into portable Markdown."""
     branch = _current_branch(root)
-    if not branch or not branch.startswith("arena/"):
+    if not branch:
         return []
 
-    pattern = re.compile(r"arena/[A-Za-z0-9._/-]+")
     findings: list[Finding] = []
     for path in iter_files(root):
         if path.suffix.lower() != ".md":
             continue
         text = _read_text(path) or ""
         for number, line in enumerate(text.splitlines(), 1):
-            for reference in pattern.findall(line):
-                reference = reference.rstrip("`.,;:)")
-                if reference != branch:
-                    findings.append(
-                        Finding(
-                            "stale-branch-reference",
-                            path.relative_to(root).as_posix(),
-                            number,
-                            "replace {!r} with current branch {!r}".format(reference, branch),
-                        )
+            if branch in line:
+                findings.append(
+                    Finding(
+                        "hardcoded-branch-reference",
+                        path.relative_to(root).as_posix(),
+                        number,
+                        "replace the current branch value with portable placeholder 'branch'",
                     )
+                )
     return findings
 
 

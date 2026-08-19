@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -79,6 +80,25 @@ class VerifierTests(unittest.TestCase):
         self.assertIn("trailing-whitespace", codes)
         self.assertIn("missing-final-newline", codes)
         self.assertIn("stale-gitkeep", codes)
+
+    def test_reports_hardcoded_current_branch(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        subprocess.run(["git", "init", "-q"], cwd=str(root), check=True)
+        subprocess.run(
+            ["git", "checkout", "-q", "-b", "topic/portable"],
+            cwd=str(root),
+            check=True,
+        )
+        (root / "README.md").write_text(
+            "Deploy topic/portable directly.\n", encoding="utf-8"
+        )
+
+        findings = verifier.verify(root)
+
+        self.assertTrue(
+            any(finding.code == "hardcoded-branch-reference" for finding in findings)
+        )
 
     def test_reports_noncanonical_name(self) -> None:
         temporary, root = self.make_repo()

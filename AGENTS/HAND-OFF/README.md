@@ -8,8 +8,9 @@ remain in [`AGENTS/README.md`](../README.md); plans remain in
 
 - `GitHub_User` means the owner derived from the `origin` remote.
 - `repo` means the current repository derived from the working copy.
+- `branch` means the current branch derived with `git branch --show-current`.
 
-Never embed a specific account, repository name, or session branch in portable
+Never embed a specific account, repository name, or branch value in portable
 agent instructions. Resolve them from Git and the current environment.
 
 ## Reload and self-describe
@@ -23,8 +24,8 @@ git status --short --branch
 python3 SRC/tools/self_consistency.py --describe
 ```
 
-When asked to check broadly for updates, inspect other remote Arena branches and
-infer semantic intent. Do not copy malformed, stale, or branch-specific text.
+When asked to check broadly for updates, inspect other remote branches and infer
+semantic intent. Do not copy malformed, stale, or branch-specific text.
 
 ## Current capabilities
 
@@ -38,7 +39,7 @@ infer semantic intent. Do not copy malformed, stale, or branch-specific text.
 
 ## Learned constraints
 
-- Work, commit, and push only on the Arena branch assigned to the session.
+- Work, commit, and push only on the `branch` assigned to the session.
 - User edits are authoritative; preserve their semantic intent during conflict
   resolution.
 - Ask the developer before structural decisions. Once approved, implement and
