@@ -1,13 +1,15 @@
-## AI instructions
+# AI instructions
+
 ## EverytimeBeforeThink
 
-###update GitHub aeihou/arena.ai
-###self.consistency.selfDescribe()
-###self.consistency.verify()
-###PLAN Next Optimization 
+### Update GitHub `aeihou/arena.ai`
+### `self.consistency.selfDescribe()`
+### `self.consistency.verify()`
+### Plan next optimization
 
 ## EverytimeAfterThink
-  commit
-  push to GitHub aeihou/arena.ai arena'sbranch.
 
-Any questions? askUser
+- Commit.
+- Push to GitHub `aeihou/arena.ai` on Arena's branch.
+
+Any questions? `askUser`.

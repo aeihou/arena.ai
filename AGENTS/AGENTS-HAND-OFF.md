@@ -1,16 +1,16 @@
 # AGENTS-HAND-OFF.md
 
-> Hand-off document for the next AI agent. Read this **before** AGENTS/README.md to pick up where the previous session left off.
+> Hand-off document for the next AI agent. Read [`AGENTS/README.md`](README.md) first for authoritative instructions, then read this file to continue where the previous session left off.
 
 ---
 
 ## 1. What this repo is
 
-`aeihou/arena.ai` — workspace of **AEIHOU and his pet AIbOT**. It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding. Working branch: `arena/01a01939-arena-ai`.
+`aeihou/arena.ai` — workspace of **AEIHOU and his pet AIbOT**. It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding. Working branch: `arena/01a019cd-arena-ai`.
 
 ## 2. Operating rules (CheckFirst → `AGENTS/README.md`)
 
-Before anything else, **always fetch GitHub first** (`git fetch origin arena/01a01939-arena-ai`):
+Before anything else, **always fetch GitHub first** (`git fetch origin arena/01a019cd-arena-ai`):
 
 ### EverytimeBeforeThink
 - `update GitHub aeihou/arena.ai` — fetch + reload remote changes
@@ -47,11 +47,11 @@ arena.ai/
 ## 4. Skills learned this session (so far)
 
 ### Git workflow (reliable sync)
-- **Before thinking**: `git fetch origin arena/01a01939-arena-ai` → check `git rev-list --count HEAD..FETCH_HEAD` → if behind, inspect `git diff HEAD FETCH_HEAD` and `git show FETCH_HEAD:<file>` → fast-forward (`git merge --ff-only FETCH_HEAD`).
+- **Before thinking**: `git fetch origin arena/01a019cd-arena-ai` → check `git rev-list --count HEAD..FETCH_HEAD` → if behind, inspect `git diff HEAD FETCH_HEAD` and `git show FETCH_HEAD:<file>` → fast-forward (`git merge --ff-only FETCH_HEAD`).
 - **After responding**: `git add -A && git commit` → fetch again → push; if remote advanced, `git rebase FETCH_HEAD` then push.
 - **Conflict resolution**: the user's GitHub edits are **authoritative**. Use `git checkout --ours <file>` for files the user changed, keep your changes only where they don't collide. Resume with `GIT_EDITOR=true git rebase --continue`.
 - **Tracking fix**: the repo's original fetch refspec only tracked `main`; it now tracks all branches (`+refs/heads/*:refs/remotes/origin/*`). Keep it that way.
-- **No PRs** unless explicitly asked. Push directly to `arena/01a01939-arena-ai`.
+- **No PRs** unless explicitly asked. Push directly to `arena/01a019cd-arena-ai`.
 
 ### Self-consistency verification (self.consistency.verify)
 - Check for **broken links** (markdown refs to non-existent files).
