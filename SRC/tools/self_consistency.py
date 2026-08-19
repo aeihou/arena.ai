@@ -49,13 +49,11 @@ TEXT_SUFFIXES = {
     ".yml",
 }
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
-# Keep typo policy data out of documentation so describing the checker does not
-# make the checker report itself.
+# Keep generic typo policy data out of documentation so describing the checker
+# does not make the checker report itself. Repository-specific identity belongs
+# to the working copy, not this portable verifier.
 DISALLOWED_NAMES = {
-    "AW" + "IHOU": "AEIHOU",
-    "AEI" + "OU": "AEIHOU",
-    "agents" + ".ai": "arena.ai",
-    "GOT" + "HUB": "GITHUB",
+    "GOT" + "HUB": "GitHub",
 }
 
 

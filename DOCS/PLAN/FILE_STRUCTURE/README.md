@@ -20,7 +20,7 @@ from the working copy instead of maintaining a duplicated static tree.
 ## Resulting structure
 
 ```text
-arena.ai/
+repo/
 ├── AEIHOU/                  owner context
 ├── AGENTS/
 │   └── HAND-OFF/            smart, minimal inter-session context

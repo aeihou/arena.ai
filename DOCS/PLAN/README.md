@@ -30,6 +30,9 @@ applied.
 - **Hand-off normalization** — moved inter-session context to the self-describing
   `AGENTS/HAND-OFF/README.md` path and made its pending/deferred state consistent
   with this plan.
+- **Portable identifiers** — replaced embedded account and repository names in
+  agent instructions with `GitHub_User/repo`; the hand-off resolves real values
+  from Git and the working copy.
 
 ## Self-consistency report generation
 

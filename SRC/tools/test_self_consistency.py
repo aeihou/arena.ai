@@ -83,7 +83,7 @@ class VerifierTests(unittest.TestCase):
     def test_reports_noncanonical_name(self) -> None:
         temporary, root = self.make_repo()
         self.addCleanup(temporary.cleanup)
-        wrong_name = "AW" + "IHOU"
+        wrong_name = "GOT" + "HUB"
         (root / "README.md").write_text("# " + wrong_name + "\n", encoding="utf-8")
 
         findings = verifier.verify(root)

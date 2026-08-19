@@ -8,7 +8,7 @@ Subfolders:
 
 ## EverytimeBeforeThink
 
-### Update GitHub `aeihou/arena.ai`
+### Update GitHub `GitHub_User/repo`
 
 ### Reload hand-off
 Read [`HAND-OFF/README.md`](HAND-OFF/README.md), infer semantic intent, and
@@ -30,6 +30,6 @@ before applying structural decisions.
 ## EverytimeAfterThink
 
 - Commit.
-- Push to GitHub `aeihou/arena.ai` on Arena's branch.
+- Push to GitHub `GitHub_User/repo` on Arena's branch.
 
 Any questions? `askDev`.

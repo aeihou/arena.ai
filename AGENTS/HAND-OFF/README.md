@@ -4,6 +4,14 @@ Smart, minimal session context for the next agent. Authoritative operating rules
 remain in [`AGENTS/README.md`](../README.md); plans remain in
 [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md).
 
+## Portable identifiers
+
+- `GitHub_User` means the owner derived from the `origin` remote.
+- `repo` means the current repository derived from the working copy.
+
+Never embed a specific account, repository name, or session branch in portable
+agent instructions. Resolve them from Git and the current environment.
+
 ## Reload and self-describe
 
 Do not trust a copied tree or branch name. Derive current state from the working
