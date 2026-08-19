@@ -3,7 +3,7 @@
 # Portable agent hand-off
 
 - **Status:** Completed
-- **Revision:** 6
+- **Revision:** 7
 - **Updated:** 2026-08-19
 - **Outcome:** Agent continuity is portable, derived from repository reality, and
   split across canonical documents.
@@ -28,6 +28,7 @@ installation.
 
 ## Canonical documents
 
+- Workspace entry: [`README.md`](../../../README.md)
 - Instructions: [`AGENTS/README.md`](../../../AGENTS/README.md)
 - Hand-off index: [`AGENTS/HAND-OFF/README.md`](../../../AGENTS/HAND-OFF/README.md)
 - Current context:
@@ -87,3 +88,4 @@ Do not keep there:
   content boundaries explicit.
 - **Revision 6:** clarified portability scope and delegated authority, Git
   reconciliation, validation levels, and completion rules to agent instructions.
+- **Revision 7:** made the root README a concise canonical-navigation entry point.

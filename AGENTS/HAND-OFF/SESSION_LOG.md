@@ -51,3 +51,12 @@ derived rather than recorded here.
   use matching revisions to detect same-day drift.
 - **Validation:** Documentation, context guards, verifier tests, Python grammar,
   and Git whitespace checks pass.
+
+## 2026-08-19 — Root entry-point rebuild
+
+- **Revision:** 6
+- **Outcome:** Rebuilt the root README as concise canonical navigation for humans
+  and first-time agents.
+- **Decisions:** Keep procedures and mutable state in their authoritative files;
+  the root README links without duplicating them.
+- **Validation:** Self-consistency and Git whitespace checks pass.
