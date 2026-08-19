@@ -7,13 +7,13 @@ Portable repository-maintenance tools.
 Run the zero-dependency verifier from the repository root:
 
 ```sh
-python3 tools/self_consistency.py
+python3 SRC/tools/self_consistency.py
 ```
 
 For a guided developer prompt and Markdown report:
 
 ```sh
-python3 tools/self_consistency.py --interactive
+python3 SRC/tools/self_consistency.py --interactive
 ```
 
 For automation, use `--format json` or `--report PATH`. The command exits with
@@ -23,5 +23,5 @@ environment errors.
 Run its test suite with:
 
 ```sh
-python3 -m unittest discover -s tools -p 'test_*.py'
+python3 -m unittest discover -s SRC/tools -p 'test_*.py'
 ```
