@@ -1,5 +1,5 @@
 #EverytimeBeforeThinking
-   #SYNCH WITH GitHub $[USER_GOTHUB]/arena.ai
+   #SYNCH WITH GitHub $[USER_GITHUB]/arena.ai
      #Update Repo
      #RELOAD Readme files
      
