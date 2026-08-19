@@ -4,48 +4,28 @@
 
 - **Status:** Completed
 - **Updated:** 2026-08-19
-- **Outcome:** Implemented and validated after developer approval.
+- **Outcome:** Maintenance code and documentation have clear canonical homes.
 
 ## Goal
 
-Reduce root-level maintenance clutter without reorganizing domain folders before
-their purposes are known. Keep agent context concise and derive repository state
-from the working copy instead of maintaining a duplicated static tree.
+Reduce root clutter and prevent speculative structure while keeping repository
+state discoverable from the working copy.
 
-## Decision
+## Decisions
 
-1. Consolidate repository-maintenance code under `SRC/tools/`.
-2. Keep `GITHUB/` as the home of inactive GitHub templates.
-3. Keep `PG01/` unchanged until its workspace requirements are approved.
-4. Replace the detailed hand-off with a slim, self-describing hand-off that
-   links to authoritative instructions and plans.
-5. Ignore generated Python caches so verification never dirties Git status.
-
-## Resulting structure
-
-```text
-repo/
-├── AEIHOU/                  owner context
-├── AGENTS/
-│   └── HAND-OFF/            smart, minimal inter-session context
-├── DOCS/PLAN/               plans and decision records
-├── GITHUB/                  inactive GitHub templates
-├── PG01/                    undefined playground; no premature scaffolding
-└── SRC/
-    └── tools/               maintenance verifier and tests
-```
+1. Keep maintenance code and tests under `SRC/tools/`.
+2. Keep inactive GitHub templates under `GITHUB/`.
+3. Keep plans and decision records under `DOCS/PLAN/`.
+4. Keep portable hand-off files under `AGENTS/HAND-OFF/`.
+5. Keep `PG01/` minimal until
+   [`DOCS/PLAN/PG01/README.md`](../PG01/README.md) becomes active.
+6. Ignore generated Python caches and local reports.
+7. Derive structure with self-description; do not maintain a static tree.
 
 ## Validation
 
-The optimization is complete when:
-
-- all verifier documentation and automation use `SRC/tools/` paths;
-- every visible directory remains self-describing;
-- the verifier and its tests pass from the repository root;
-- no generated cache appears in `git status`; and
-- the hand-off contains no hardcoded branch name or duplicated static tree.
-
-## Deferred decision
-
-The next structural decision is the purpose of `PG01`. Its subfolders should be
-created only after the developer chooses its intended workflow.
+- Every visible directory has a descriptor.
+- Parent descriptors index direct visible subfolders.
+- Tool paths consistently use `SRC/tools/`.
+- Generated artifacts do not dirty Git status.
+- Self-description, verification, and tests pass from the repository root.

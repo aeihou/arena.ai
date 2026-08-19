@@ -18,3 +18,12 @@ derived rather than recorded here.
 - **Decisions:** Track semantic state after every meaningful change; omit commit
   hashes, changed-file lists, and resolved runtime identifiers.
 - **Validation:** Context links, plans, verifier checks, and tests pass.
+
+## 2026-08-19 — Documentation consolidation
+
+- **Outcome:** Removed duplicated procedures, stale static structure, repeated
+  plan state, and misplaced tool guidance.
+- **Decisions:** Keep each concern in one canonical document and link to it from
+  concise indexes and context.
+- **Validation:** Documentation links, verifier checks, tests, and whitespace
+  checks pass.

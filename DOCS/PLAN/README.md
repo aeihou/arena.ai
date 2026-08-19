@@ -2,15 +2,8 @@
 
 # Plans
 
-Canonical registry for repository plans and decision records.
-
-Subfolders:
-- [`DOCS/PLAN/FILE_STRUCTURE/README.md`](FILE_STRUCTURE/README.md) — completed repository-structure optimization.
-- [`DOCS/PLAN/PORTABLE_HAND_OFF/README.md`](PORTABLE_HAND_OFF/README.md) — completed portable agent-context plan.
-- [`DOCS/PLAN/INTERACTIVE_FIXER/README.md`](INTERACTIVE_FIXER/README.md) — completed grouped safe-fix interaction plan.
-- [`DOCS/PLAN/SESSION_CONTEXT/README.md`](SESSION_CONTEXT/README.md) — completed next-agent context tracking plan.
-- [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) — blocked CI activation plan.
-- [`DOCS/PLAN/PG01/README.md`](PG01/README.md) — deferred playground definition plan.
+Canonical registry for repository plans and decision records. Detailed state
+lives only in the linked plan files.
 
 ## Status model
 

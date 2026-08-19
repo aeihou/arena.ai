@@ -2,48 +2,42 @@
 
 # tools
 
-Portable repository-maintenance tools.
+Portable, standard-library repository maintenance.
 
-## Self-consistency verifier
+## Verifier commands
 
-Run the zero-dependency verifier from the repository root:
+Run from the repository root:
 
 ```sh
+# Verify
 python3 SRC/tools/self_consistency.py
-```
 
-Derive the branch, inventory counts, top-level purposes, and complete file list,
-then verify the repository in one command:
-
-```sh
+# Describe files and top-level purposes, then verify
 python3 SRC/tools/self_consistency.py --describe
-```
 
-The same inventory is available as `description.file_paths` with
-`--describe --format json`.
-
-For grouped, developer-approved safe fixes followed by an optional Markdown
-report:
-
-```sh
+# Preview grouped safe fixes for developer approval
 python3 SRC/tools/self_consistency.py --interactive
+
+# Automation and durable reports
+python3 SRC/tools/self_consistency.py --format json
+python3 SRC/tools/self_consistency.py --report self-consistency-report.md
 ```
 
-Interactive mode previews categories and defaults every prompt to No. It can fix
-README full paths, canonical internal README links, trailing whitespace, and
-missing final newlines. It never deletes files or changes directory structure.
+Combine `--describe --format json` for structured description and findings.
+Interactive prompts default to No and never delete files or alter directory
+structure.
 
-For automation, use `--format json` or `--report PATH`. Combine JSON with
-`--describe` to receive an object containing both `description` and `findings`.
-The verifier also ensures every README starts with its repository-absolute full
-path, visible direct subfolders are indexed by parent documentation, internal
-README links display repository-relative file names and target files directly,
-and the current branch value does not leak into portable Markdown. The command
-exits with
-status `0` when all checks pass, `1` when findings exist, and `2` for usage or
-environment errors.
+## Enforced rules
 
-Run its test suite with:
+The verifier checks local links, README path declarations and link names, folder
+descriptors and child indexes, placeholders, portable branch references, generic
+canonical naming, whitespace, and final newlines. Interactive mode can safely fix
+README paths, README links, and text formatting.
+
+Exit status is `0` for success, `1` for findings, and `2` for usage or environment
+errors.
+
+## Tests
 
 ```sh
 python3 -m unittest discover -s SRC/tools -p 'test_*.py'
