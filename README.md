@@ -1,7 +1,6 @@
-/README.md
+# AEIHOU workspace
 
-Workspace of AEIHOU
+Workspace of AEIHOU.
 
-> 🤖 AI agent instructions 
-> ## CheckFirst
-> '/AGENTS/README.md'
+> 🤖 **AI agents — check first:** read [`AGENTS/README.md`](AGENTS/README.md)
+> before working in this repository.

@@ -35,7 +35,8 @@ semantic intent. Do not copy malformed, stale, or branch-specific text.
   tests.
 - `GITHUB/self-consistency.yml` is an inactive GitHub Actions template because
   the current GitHub connection cannot install workflow files.
-- Repository structure and pending work are documented under `DOCS/PLAN/`.
+- Plan status is indexed in [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md);
+  details and acceptance criteria live in each plan subfolder.
 
 ## Learned constraints
 
@@ -52,9 +53,9 @@ semantic intent. Do not copy malformed, stale, or branch-specific text.
 
 ## Current decision state
 
-- **Pending:** activate the GitHub Actions template when workflow permissions
-  are available.
-- **Deferred:** keep `PG01` minimal until the developer chooses a concrete
-  purpose.
-- **Continuous:** keep plans and this hand-off short, current, and derived from
-  repository reality.
+- **Blocked:** [continuous verification](../../DOCS/PLAN/CONTINUOUS_VERIFICATION/)
+  awaits GitHub workflow permission.
+- **Deferred:** [PG01 definition](../../DOCS/PLAN/PG01/) awaits a concrete
+  developer-selected purpose.
+- **Continuous:** keep the plan registry, detailed plan status, and this hand-off
+  short and consistent with repository reality.

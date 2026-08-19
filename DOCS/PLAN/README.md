@@ -1,65 +1,40 @@
-# PLAN
+# Plans
 
-Plans & roadmap folder.
+Canonical registry for repository plans and decision records.
 
 Subfolders:
-- `FILE_STRUCTURE/` — file structure optimization plans.
+- [`FILE_STRUCTURE/`](FILE_STRUCTURE/) — completed repository-structure optimization.
+- [`PORTABLE_HAND_OFF/`](PORTABLE_HAND_OFF/) — completed portable agent-context plan.
+- [`CONTINUOUS_VERIFICATION/`](CONTINUOUS_VERIFICATION/) — blocked CI activation plan.
+- [`PG01/`](PG01/) — deferred playground definition plan.
 
-## Pending plans
+## Status model
 
-Agents maintain this section as plans are proposed, approved, completed, or
-superseded. Structural decisions require developer approval before changes are
-applied.
+| Status | Meaning |
+|---|---|
+| Proposed | An idea has been documented but not reviewed. |
+| Pending approval | The developer must approve a decision before implementation. |
+| Blocked | The plan is approved or actionable but an external dependency prevents progress. |
+| Deferred | No action is expected until its trigger or purpose becomes clear. |
+| Completed | Acceptance criteria were met and the result was validated. |
+| Superseded | A linked plan replaced this plan. |
 
-1. **Continuous verification** — install `GITHUB/self-consistency.yml` as an
-   active workflow when GitHub workflow permissions are available.
+## Registry
 
-## Deferred decisions
+| Plan | Status | Next action |
+|---|---|---|
+| [File-structure optimization](FILE_STRUCTURE/) | Completed | Preserve the documented conventions. |
+| [Portable agent hand-off](PORTABLE_HAND_OFF/) | Completed | Preserve derived identifiers and concise context. |
+| [Continuous verification](CONTINUOUS_VERIFICATION/) | Blocked | Restore GitHub workflow permission, then activate the template. |
+| [PG01 definition](PG01/) | Deferred | Ask the developer for a concrete playground purpose. |
 
-- **PG01 definition** — keep the playground minimal until the developer chooses
-  a concrete purpose. Do not add speculative subfolders.
+## Maintenance rules
 
-## Completed plans
-
-- **File-structure optimization** — consolidated maintenance tooling under
-  `SRC/tools/` and replaced duplicated hand-off content with a slim hand-off.
-  See [`FILE_STRUCTURE/`](FILE_STRUCTURE/).
-- **Smart self-description** — added repository-derived branch, inventory, and
-  top-level purpose output to the verifier; parent documentation now indexes
-  each direct visible subfolder.
-- **Hand-off normalization** — moved inter-session context to the self-describing
-  `AGENTS/HAND-OFF/README.md` path and made its pending/deferred state consistent
-  with this plan.
-- **Portable identifiers** — replaced embedded account, repository, and branch
-  values with `GitHub_User/repo` and `branch`; the hand-off resolves real values
-  from Git and the working copy.
-
-## Self-consistency report generation
-
-The portable verifier checks local Markdown links, canonical names, directory
-self-description and child indexes, stale `.gitkeep` files, hardcoded current
-branch values, and text formatting. Derive a current repository description with:
-
-```sh
-python3 SRC/tools/self_consistency.py --describe
-```
-
-Use its interactive terminal flow when collaborating with a developer:
-
-```sh
-python3 SRC/tools/self_consistency.py --interactive
-```
-
-The prompt offers to create `self-consistency-report.md`, which is ignored by
-Git because it is a local generated artifact. To generate a report without
-prompts—for example in another automation job—provide the destination directly:
-
-```sh
-python3 SRC/tools/self_consistency.py --report self-consistency-report.md
-```
-
-A report contains a pass/fail summary and an actionable table of findings. The
-verifier does not modify repository content; developers retain control over all
-fixes. A portable GitHub Actions template is available at
-`GITHUB/self-consistency.yml`; install it under `.github/workflows/` when CI is
-needed.
+1. Keep detailed scope, decisions, and acceptance criteria in each plan's own
+   `README.md`; keep this file as a concise registry.
+2. Update a plan and this registry together whenever its status changes.
+3. Ask the developer before structural decisions or moving a plan into active
+   implementation.
+4. Record blockers explicitly instead of repeatedly attempting blocked work.
+5. Move completed implementation guidance to the relevant product or tool docs;
+   plans retain only the decision record and validation outcome.

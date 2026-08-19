@@ -1,5 +1,7 @@
 # A8 instructions for agents.
 
+Authoritative, portable operating instructions for agents.
+
 Subfolders:
 - [`HAND-OFF/`](HAND-OFF/) — concise state and learned constraints for the next
   agent.
@@ -22,13 +24,15 @@ Run `python3 SRC/tools/self_consistency.py` and resolve every finding. Use
 Markdown report is needed.
 
 ### Plan next optimization
-Maintain the pending-plan section in `DOCS/PLAN/README.md`. Ask the developer
-before applying structural decisions.
+Maintain the registry in [`DOCS/PLAN/README.md`](../DOCS/PLAN/README.md) and the
+detailed document in the matching plan subfolder. Update both when status
+changes, and ask the developer before applying structural decisions.
 
 ## EverytimeAfterThink
 
 - Commit.
 - Push to GitHub `GitHub_User/repo` on the current `branch`.
 
-## Any questions? 
+## Any questions?
+
 > `askDev`.

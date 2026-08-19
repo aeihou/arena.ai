@@ -3,4 +3,4 @@
 Documentation folder.
 
 Subfolders:
-- `PLAN/` — plans & roadmap.
+- [`PLAN/`](PLAN/) — canonical plan registry and detailed decision records.
