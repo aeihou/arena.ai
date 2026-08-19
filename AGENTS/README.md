@@ -7,7 +7,7 @@
 ✓ PLAN FILE_STRUCTURE Optimization 
 
 ## EverytimeAfterThink
-✓commit
- push to GitHub aeihou/arena.ai arena's branch.
+  commit 
+  push to GitHub aeihou/arena.ai arena'sbranch.
 
 Any questions? askUser
