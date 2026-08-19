@@ -1,3 +1,5 @@
+/DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md
+
 # Continuous verification
 
 - **Status:** Blocked

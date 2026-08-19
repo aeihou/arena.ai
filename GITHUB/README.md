@@ -1,3 +1,5 @@
+/GITHUB/README.md
+
 # GITHUB
 
 GitHub-related templates that are not active until installed.

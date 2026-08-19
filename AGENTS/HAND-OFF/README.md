@@ -1,3 +1,5 @@
+/AGENTS/HAND-OFF/README.md
+
 # Agent hand-off
 
 Smart, minimal session context for the next agent. Authoritative operating rules
@@ -48,6 +50,8 @@ semantic intent. Do not copy malformed, stale, or branch-specific text.
 - Keep `AGENTS/README.md` as the single source of operating instructions; do not
   duplicate its full workflow here.
 - Every visible directory self-describes with `README.md` or `<NAME>.md`.
+- Every `README.md` starts with its repository-absolute full path, such as
+  `/AGENTS/HAND-OFF/README.md`.
 - In every `README.md`, internal links display the repository-relative linked
   file name and target that file directly.
 - Use canonical repository names, valid local Markdown links, clean text

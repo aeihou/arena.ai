@@ -1,3 +1,5 @@
+/DOCS/PLAN/PG01/README.md
+
 # PG01 definition
 
 - **Status:** Deferred

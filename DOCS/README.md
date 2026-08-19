@@ -1,3 +1,5 @@
+/DOCS/README.md
+
 # DOCS
 
 Documentation folder.

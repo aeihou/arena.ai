@@ -50,6 +50,7 @@ TEXT_SUFFIXES = {
 }
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 README_LINK = re.compile(r"(?<!!)\[([^\]]*)\]\(([^)]+)\)")
+README_FULL_PATH = re.compile(r"^/(?:.*/)?README\.md$")
 # Keep generic typo policy data out of documentation so describing the checker
 # does not make the checker report itself. Repository-specific identity belongs
 # to the working copy, not this portable verifier.
@@ -128,7 +129,11 @@ def _folder_summary(directory: Path) -> str:
         for line in text.splitlines():
             stripped = line.strip()
             if not paragraph:
-                if not stripped or stripped.startswith(("#", "```", ">")):
+                if (
+                    not stripped
+                    or stripped.startswith(("#", "```", ">"))
+                    or README_FULL_PATH.fullmatch(stripped)
+                ):
                     continue
                 paragraph.append(stripped)
             elif not stripped or stripped.startswith(("#", "```")):
@@ -230,6 +235,28 @@ def check_markdown_links(root: Path) -> list[Finding]:
                             "local link does not exist: {}".format(target),
                         )
                     )
+    return findings
+
+
+def check_readme_full_paths(root: Path) -> list[Finding]:
+    """Require every README to declare its repository-absolute path first."""
+    findings: list[Finding] = []
+    for path in iter_files(root):
+        if path.name != "README.md":
+            continue
+        text = _read_text(path) or ""
+        lines = text.splitlines()
+        first_line = lines[0] if lines else ""
+        expected = "/" + path.relative_to(root).as_posix()
+        if first_line != expected:
+            findings.append(
+                Finding(
+                    "missing-readme-full-path",
+                    path.relative_to(root).as_posix(),
+                    1,
+                    "start the file with {!r}".format(expected),
+                )
+            )
     return findings
 
 
@@ -412,6 +439,7 @@ def check_branch_references(root: Path) -> list[Finding]:
 def verify(root: Path) -> list[Finding]:
     checks = (
         check_markdown_links,
+        check_readme_full_paths,
         check_readme_link_names,
         check_folder_descriptions,
         check_folder_indexes,

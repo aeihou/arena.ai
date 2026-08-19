@@ -1,3 +1,5 @@
+/DOCS/PLAN/FILE_STRUCTURE/README.md
+
 # File-structure optimization
 
 - **Status:** Completed

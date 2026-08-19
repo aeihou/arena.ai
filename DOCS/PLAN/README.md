@@ -1,3 +1,5 @@
+/DOCS/PLAN/README.md
+
 # Plans
 
 Canonical registry for repository plans and decision records.

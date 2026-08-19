@@ -1,3 +1,5 @@
+/DOCS/PLAN/PORTABLE_HAND_OFF/README.md
+
 # Portable agent hand-off
 
 - **Status:** Completed
@@ -22,10 +24,14 @@ copying stale identity or branch state.
    `python3 SRC/tools/self_consistency.py --describe` instead of maintaining a
    static tree in the hand-off.
 6. Treat hardcoded current branch values in Markdown as consistency findings.
+7. Begin every README with its repository-absolute full path.
+8. Display repository-relative file names for internal README links and target
+   those files directly.
 
 ## Acceptance criteria
 
 - Agent documentation contains no embedded account, repository, or branch value.
+- Every README declares its repository-absolute full path on the first line.
 - The hand-off links to authoritative instructions and the plan registry using
   repository-relative linked file names.
 - Repository self-description and verification pass from the root.

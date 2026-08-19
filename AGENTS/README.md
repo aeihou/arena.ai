@@ -1,12 +1,11 @@
-
-
+/AGENTS/README.md
 
 ## instructions for agents.
 
 Authoritative, portable operating instructions for agents.
 
 Subfolders:
-- [`HAND-OFF/`](HAND-OFF/) — concise state and learned constraints for the next
+- [`AGENTS/HAND-OFF/README.md`](HAND-OFF/README.md) — concise state and learned constraints for the next
   agent.
 
 ## EverytimeBeforeThink
@@ -14,7 +13,7 @@ Subfolders:
 ### Update GitHub `GitHub_User/repo`
 
 ### Reload hand-off
-Read [`HAND-OFF/README.md`](HAND-OFF/README.md), infer semantic intent, and
+Read [`AGENTS/HAND-OFF/README.md`](HAND-OFF/README.md), infer semantic intent, and
 continue from current repository reality.
 
 ### `self.consistency.selfDescribe()`
