@@ -46,21 +46,26 @@ Run from the repository root:
 git status --short --branch
 branch=$(git branch --show-current)
 test -n "$branch"
-git fetch origin "$branch"
-git rev-list --left-right --count HEAD...FETCH_HEAD
+git remote get-url origin
+git fetch origin
 ```
 
-Interpret the counts as local-only then remote-only commits:
+Then compare `HEAD` to `origin/$branch` only when that remote-tracking ref
+exists. `python3 SRC/tools/self_consistency.py --describe` reports the same
+derived `GitHub_User` and sync state.
 
+- Remote `branch` absent — first session on this branch; continue as local-only.
+  The first push creates `origin/branch`.
 - `0 0` — synchronized.
-- `0 N` — fast-forward with `git merge --ff-only FETCH_HEAD`.
+- `0 N` — fast-forward with `git merge --ff-only origin/$branch`.
 - `N 0` — local work is ahead; continue without switching branches.
-- `N M` — reconcile by rebasing local agent commits onto `FETCH_HEAD`, preserving
-  remote developer intent. Stop for `askDev` if resolution is ambiguous.
+- `N M` — rebase local agent commits onto `origin/$branch`, preserving remote
+  developer intent. Stop for `askDev` if resolution is ambiguous.
 
 Never switch from the assigned `branch`. Do not discard a dirty working tree. If
-the branch is detached, `origin` is missing, fetch fails, or authentication is
-unavailable, stop and report the blocker.
+the branch is detached, `origin` is missing, or fetch fails because
+authentication or the network is unavailable, stop and report the blocker. A
+missing remote `branch` is not a blocker.
 
 ### 2. Derive repository state
 
@@ -107,8 +112,9 @@ corrections need no new log entry.
    [`AGENTS/HAND-OFF/SESSION_LOG.md`](HAND-OFF/SESSION_LOG.md); make the rolling
    `Log revision` match it.
 4. Commit implementation and context together.
-5. Fetch `branch` again, reconcile remote changes, and push only the assigned
-   `branch` to `GitHub_User/repo`.
+5. Fetch `origin` again, reconcile against `origin/branch` when that ref exists,
+   and push only the assigned `branch` to `GitHub_User/repo`. The first push
+   creates the remote `branch` when it was absent.
 
 ## Questions
 

@@ -41,8 +41,9 @@ self-description derives them from the working copy.
 ## Current capability
 
 `python3 SRC/tools/self_consistency.py --describe` reports repository identity,
-counts, top-level purposes, every relevant directory with its descriptor, every
-relevant file, and consistency findings. JSON exposes the same data for tools.
+derived `GitHub_User` and branch sync, counts, top-level purposes, every
+relevant directory with its descriptor, every relevant file, and consistency
+findings. JSON exposes the same data for tools.
 
 ## Active direction
 

@@ -1,17 +1,16 @@
 # Rolling session context
 
 - **Updated:** 2026-08-19
-- **Log revision:** 7
+- **Log revision:** 8
 - **Purpose:** Minimal semantic state for the next agent.
 
 ## Latest outcome
 
-- Established a durable active goal: self-description, portable session hand-off,
-  dynamic growth, and machine-enforced consistency.
-- Extended self-description to enumerate every relevant directory and its
-  canonical descriptor as well as every relevant file.
-- Added a growth protocol that couples structure, descriptors, registries,
-  context, tests, and validation.
+- Derived `GitHub_User` and branch sync state in self-description.
+- Treated a missing remote `branch` as local-only first-session state, not a
+  fetch blocker.
+- Reconcile against `origin/branch` after fetching `origin` instead of
+  `FETCH_HEAD`.
 
 ## Current state
 
@@ -30,6 +29,7 @@
 ## Next agent
 
 1. Follow [`AGENTS/README.md`](../README.md).
-2. Use the active self-describing-repository goal to prioritize optimizations.
-3. Preserve dynamic discovery; do not introduce static inventories or duplicated
+2. Use `--describe` to read derived Git identity and sync before reconciling.
+3. Use the active self-describing-repository goal to prioritize optimizations.
+4. Preserve dynamic discovery; do not introduce static inventories or duplicated
    sources of truth.

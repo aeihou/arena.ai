@@ -70,3 +70,13 @@ derived rather than recorded here.
   context, focused tests, and validation without static inventories.
 - **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
   checks pass.
+
+## 2026-08-19 — Derived Git identity and first-session sync
+
+- **Revision:** 8
+- **Outcome:** Self-description now reports derived `GitHub_User` and branch
+  sync, and first-time agents continue when `origin/branch` does not exist yet.
+- **Decisions:** Fetch `origin` rather than only `branch`; compare `HEAD` to
+  `origin/branch`; a missing remote `branch` is local-only, not a blocker.
+- **Validation:** Self-consistency, full tests, Python grammar, and Git
+  whitespace checks pass.

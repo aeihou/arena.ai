@@ -3,7 +3,7 @@
 # Portable agent hand-off
 
 - **Status:** Completed
-- **Revision:** 7
+- **Revision:** 8
 - **Updated:** 2026-08-19
 - **Outcome:** Agent continuity is portable, derived from repository reality, and
   split across canonical documents.
@@ -89,3 +89,5 @@ Do not keep there:
 - **Revision 6:** clarified portability scope and delegated authority, Git
   reconciliation, validation levels, and completion rules to agent instructions.
 - **Revision 7:** made the root README a concise canonical-navigation entry point.
+- **Revision 8:** first-session branches without `origin/branch` are local-only;
+  identity and sync are derived by self-description after fetching `origin`.

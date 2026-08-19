@@ -125,7 +125,86 @@ class VerifierTests(unittest.TestCase):
         rendered = verifier.description_text(description)
         self.assertIn("Directories:\n- SRC/ -> SRC/README.md", rendered)
         self.assertIn("Files:\n- README.md\n- SRC/README.md", rendered)
+        self.assertIn("GitHub_User: not detected", rendered)
+        self.assertIn("Sync: not detected", rendered)
+        self.assertEqual("no-git", description.sync)
         self.assertEqual(2, description.files)
+
+    def _run_git(self, root: Path, *args: str) -> None:
+        subprocess.run(
+            ["git", *args],
+            cwd=str(root),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+    def _init_git_repo(self, root: Path, branch: str) -> None:
+        self._run_git(root, "init", "-q")
+        self._run_git(root, "checkout", "-q", "-b", branch)
+        self._run_git(root, "config", "user.email", "dev@example.com")
+        self._run_git(root, "config", "user.name", "Dev")
+        self._run_git(root, "config", "commit.gpgsign", "false")
+        self._run_git(root, "add", "README.md")
+        self._run_git(root, "commit", "-q", "-m", "init")
+
+    def test_parses_supported_github_origin_urls(self) -> None:
+        cases = (
+            ("https://github.com/octo/demo.git", "octo", "demo"),
+            ("git@github.com:octo/demo.git", "octo", "demo"),
+            ("ssh://git@github.com/octo/demo", "octo", "demo"),
+            ("https://example.com/octo/demo.git", None, None),
+        )
+        for url, user, repo in cases:
+            self.assertEqual((user, repo), verifier._parse_github_identity(url))
+
+    def test_describes_github_user_and_remote_absent_sync(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        self._init_git_repo(root, "topic/portable")
+        self._run_git(root, "remote", "add", "origin", "https://github.com/octo/demo.git")
+
+        description = verifier.describe_repository(root)
+        rendered = verifier.description_text(description)
+
+        self.assertEqual("topic/portable", description.branch)
+        self.assertEqual("octo", description.github_user)
+        self.assertEqual("remote-branch-absent", description.sync)
+        self.assertIsNone(description.ahead)
+        self.assertIsNone(description.behind)
+        self.assertIn("GitHub_User: octo", rendered)
+        self.assertIn("Sync: remote branch absent; local only", rendered)
+
+    def test_describes_ahead_and_behind_sync_counts(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        self._init_git_repo(root, "topic/portable")
+        self._run_git(root, "remote", "add", "origin", "https://github.com/octo/demo.git")
+        self._run_git(root, "update-ref", "refs/remotes/origin/topic/portable", "HEAD")
+
+        synchronized = verifier.describe_repository(root)
+        self.assertEqual("synchronized", synchronized.sync)
+        self.assertEqual(0, synchronized.ahead)
+        self.assertEqual(0, synchronized.behind)
+
+        (root / "README.md").write_text(
+            "/README.md\n\n# Ahead\n", encoding="utf-8"
+        )
+        self._run_git(root, "add", "README.md")
+        self._run_git(root, "commit", "-q", "-m", "ahead")
+        ahead = verifier.describe_repository(root)
+        self.assertEqual("ahead", ahead.sync)
+        self.assertEqual(1, ahead.ahead)
+        self.assertEqual(0, ahead.behind)
+        self.assertIn("Sync: ahead 1", verifier.description_text(ahead))
+
+        self._run_git(root, "update-ref", "refs/remotes/origin/topic/portable", "HEAD")
+        self._run_git(root, "reset", "--hard", "HEAD~1")
+        behind = verifier.describe_repository(root)
+        self.assertEqual("behind", behind.sync)
+        self.assertEqual(0, behind.ahead)
+        self.assertEqual(1, behind.behind)
+        self.assertIn("Sync: behind 1", verifier.description_text(behind))
 
     def test_reports_formatting_and_stale_placeholder(self) -> None:
         temporary, root = self.make_repo()

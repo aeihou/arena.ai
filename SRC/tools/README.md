@@ -12,7 +12,7 @@ Run from the repository root:
 # Verify
 python3 SRC/tools/self_consistency.py
 
-# Describe directories, descriptors, files, and top-level purposes, then verify
+# Describe identity, sync, directories, descriptors, files, and purposes, then verify
 python3 SRC/tools/self_consistency.py --describe
 
 # Preview grouped safe fixes for developer approval
@@ -24,9 +24,11 @@ python3 SRC/tools/self_consistency.py --report self-consistency-report.md
 ```
 
 Combine `--describe --format json` for structured description and findings,
-including `directory_paths`, `directory_descriptors`, and `file_paths`.
-Interactive prompts default to No and never delete files or alter directory
-structure.
+including `github_user`, `sync`, `ahead`, `behind`, `directory_paths`,
+`directory_descriptors`, and `file_paths`. `sync` is derived from local Git
+state and is one of `no-git`, `detached`, `no-origin`, `remote-branch-absent`,
+`synchronized`, `ahead`, `behind`, `diverged`, or `unknown`. Interactive
+prompts default to No and never delete files or alter directory structure.
 
 ## Enforced rules
 
@@ -44,4 +46,6 @@ errors.
 
 ```sh
 python3 -m unittest discover -s SRC/tools -p 'test_*.py'
+python3 -m py_compile SRC/tools/self_consistency.py SRC/tools/test_self_consistency.py
+git diff --check
 ```

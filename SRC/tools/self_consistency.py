@@ -76,6 +76,10 @@ class RepositoryDescription:
 
     name: str
     branch: str | None
+    github_user: str | None
+    sync: str
+    ahead: int | None
+    behind: int | None
     directories: int
     files: int
     directory_paths: tuple[str, ...]
@@ -109,10 +113,11 @@ def _read_text(path: Path) -> str | None:
         return None
 
 
-def _current_branch(root: Path) -> str | None:
+def _git(root: Path, *args: str) -> str | None:
+    """Return stripped Git stdout, or None when Git is unavailable or fails."""
     try:
         result = subprocess.run(
-            ["git", "branch", "--show-current"],
+            ["git", *args],
             cwd=str(root),
             check=True,
             capture_output=True,
@@ -121,6 +126,84 @@ def _current_branch(root: Path) -> str | None:
     except (OSError, subprocess.CalledProcessError):
         return None
     return result.stdout.strip() or None
+
+
+def _current_branch(root: Path) -> str | None:
+    return _git(root, "branch", "--show-current")
+
+
+def _is_git_root(root: Path) -> bool:
+    """Return True only when root is the Git working-copy top level."""
+    toplevel = _git(root, "rev-parse", "--show-toplevel")
+    if not toplevel:
+        return False
+    try:
+        return Path(toplevel).resolve() == root.resolve()
+    except OSError:
+        return False
+
+
+def _parse_github_identity(url: str) -> tuple[str | None, str | None]:
+    """Return (GitHub_User, origin-repo) from a supported GitHub origin URL."""
+    value = url.strip()
+    if value.endswith("/"):
+        value = value[:-1]
+    if value.endswith(".git"):
+        value = value[:-4]
+    marker = "github.com"
+    lowered = value.lower()
+    if marker not in lowered:
+        return None, None
+    index = lowered.index(marker) + len(marker)
+    separator = value[index : index + 1]
+    if separator not in {":", "/"}:
+        return None, None
+    parts = [part for part in value[index + 1 :].split("/") if part]
+    if len(parts) < 2:
+        return None, None
+    return parts[0], parts[1]
+
+
+def _sync_state(root: Path, branch: str | None) -> tuple[str, int | None, int | None]:
+    """Derive local-vs-origin sync without fetching or mutating Git state."""
+    if not _is_git_root(root):
+        return "no-git", None, None
+    if not branch:
+        return "detached", None, None
+    if _git(root, "remote", "get-url", "origin") is None:
+        return "no-origin", None, None
+    remote_ref = "refs/remotes/origin/{}".format(branch)
+    if _git(root, "rev-parse", "--verify", "--quiet", remote_ref) is None:
+        return "remote-branch-absent", None, None
+    counts = _git(root, "rev-list", "--left-right", "--count", "HEAD...origin/{}".format(branch))
+    if counts is None:
+        return "unknown", None, None
+    parts = counts.split()
+    if len(parts) != 2 or not parts[0].isdigit() or not parts[1].isdigit():
+        return "unknown", None, None
+    ahead, behind = int(parts[0]), int(parts[1])
+    if ahead == 0 and behind == 0:
+        status = "synchronized"
+    elif behind == 0:
+        status = "ahead"
+    elif ahead == 0:
+        status = "behind"
+    else:
+        status = "diverged"
+    return status, ahead, behind
+
+
+_SYNC_TEXT = {
+    "no-git": "not detected",
+    "detached": "detached HEAD",
+    "no-origin": "origin missing",
+    "remote-branch-absent": "remote branch absent; local only",
+    "synchronized": "synchronized",
+    "ahead": "ahead",
+    "behind": "behind",
+    "diverged": "diverged",
+    "unknown": "unknown",
+}
 
 
 def _folder_descriptor(directory: Path) -> Path | None:
@@ -164,9 +247,18 @@ def describe_repository(root: Path) -> RepositoryDescription:
         for path in sorted(root.iterdir())
         if path.is_dir() and not path.name.startswith(".") and not _is_ignored(path, root)
     )
+    git_root = _is_git_root(root)
+    branch = _current_branch(root) if git_root else None
+    origin_url = _git(root, "remote", "get-url", "origin") if git_root else None
+    github_user = _parse_github_identity(origin_url)[0] if origin_url else None
+    sync, ahead, behind = _sync_state(root, branch)
     return RepositoryDescription(
         name=root.name,
-        branch=_current_branch(root),
+        branch=branch,
+        github_user=github_user,
+        sync=sync,
+        ahead=ahead,
+        behind=behind,
         directories=len(directories),
         files=len(files),
         directory_paths=tuple(
@@ -187,9 +279,22 @@ def describe_repository(root: Path) -> RepositoryDescription:
 
 
 def description_text(description: RepositoryDescription) -> str:
+    sync = _SYNC_TEXT.get(description.sync, description.sync)
+    if description.sync == "ahead" and description.ahead is not None:
+        sync = "ahead {}".format(description.ahead)
+    elif description.sync == "behind" and description.behind is not None:
+        sync = "behind {}".format(description.behind)
+    elif (
+        description.sync == "diverged"
+        and description.ahead is not None
+        and description.behind is not None
+    ):
+        sync = "diverged {} ahead, {} behind".format(description.ahead, description.behind)
     lines = [
         "Repository: {}".format(description.name),
         "Branch: {}".format(description.branch or "not detected"),
+        "GitHub_User: {}".format(description.github_user or "not detected"),
+        "Sync: {}".format(sync),
         "Inventory: {} directories, {} files".format(
             description.directories, description.files
         ),
