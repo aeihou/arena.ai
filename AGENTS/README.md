@@ -1,12 +1,14 @@
-# AGENTS AI instructions
-## Antesdepensar(
-  EL AGENTE está encargado de actualizar archivos y directorios para que la estructura de archivo sea consistente.verify self-consistency selfDescribe
+## AI instructions
+## EverytimeBeforeThink
 
-## EverytimeBeforeThinking
-✓ update Github aeihou/arena.ai at Arena.ai's repo; reload conversation ai
+✓ update Github aeihou/arena.ai
+  self.consistency.verify 
+  self-consistency.selfDescribe
 
-✓ RELOAD REPO BEFORETHINKING AND PLAN OPTIMIZATION OF FILESTRUCT
+✓ PLAN OPTIMIZATION OF FILE_STRUCTURE 
 
-## al finalizar cada respuesta(
-   commit, push, 
+## EverytimeAfterThink
+commit, push, 
    to github aeihou/arena.ai arena'sbranch
+
+Any questions? askUser
