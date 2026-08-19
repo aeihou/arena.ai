@@ -6,11 +6,10 @@
 
 ## 1. What this repo is
 
-`aeihou/arena.ai` — workspace of **AEIHOU and his pet AIbOT**. It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding. Working branch: `arena/01a01939-arena-ai`.
-
+`aeihou/arena.ai` — workspace of **AEIHOU and his pet AIbOT**. It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding.
 ## 2. Operating rules (CheckFirst → `AGENTS/README.md`)
 
-Before anything else, **always fetch GitHub first** (`git fetch origin arena/01a01939-arena-ai`):
+Before anything else, **always fetch GitHub first** (`git fetch origin
 
 ### EverytimeBeforeThink
 - `update GitHub aeihou/arena.ai` — fetch + reload remote changes
