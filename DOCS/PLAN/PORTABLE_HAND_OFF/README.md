@@ -3,7 +3,7 @@
 # Portable agent hand-off
 
 - **Status:** Completed
-- **Revision:** 5
+- **Revision:** 6
 - **Updated:** 2026-08-19
 - **Outcome:** Agent continuity is portable, derived from repository reality, and
   split across canonical documents.
@@ -14,6 +14,10 @@ Transfer useful agent context between repositories and sessions without copying
 stale runtime state or duplicating instructions, plans, history, and tool docs.
 
 ## Contract
+
+Portability covers GitHub repositories with Git, Python 3.9 or newer, and the
+canonical workspace layout. Other hosts and arbitrary layouts require an adapted
+installation.
 
 - Use `GitHub_User`, `repo`, and `branch` as unresolved portable identifiers.
 - Derive actual values from `origin`, the working-copy root, and Git.
@@ -81,3 +85,5 @@ Do not keep there:
 - **Revision 4:** added rolling context and compact semantic history.
 - **Revision 5:** removed repeated procedures and made canonical ownership and
   content boundaries explicit.
+- **Revision 6:** clarified portability scope and delegated authority, Git
+  reconciliation, validation levels, and completion rules to agent instructions.

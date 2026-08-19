@@ -31,12 +31,14 @@ Repositories that do not use these conventions are unaffected.
 
 ## Session guards
 
-- Rolling context requires an ISO `Updated` date and non-empty outcome, state,
-  validation, and next-agent sections.
+- Rolling context requires an ISO `Updated` date, positive `Log revision`, and
+  non-empty outcome, state, validation, and next-agent sections.
 - Rolling context requires a sibling compact log.
-- Compact logs require at least one dated entry with Outcome, Decisions, and
+- Compact logs require dated entries with Revision, Outcome, Decisions, and
   Validation fields.
-- Rolling context cannot predate the newest sibling log entry.
+- Log revisions must be unique and strictly increasing.
+- Rolling date cannot predate the newest entry, and rolling `Log revision` must
+  equal the newest entry `Revision`.
 
 ## Acceptance criteria
 

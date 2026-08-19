@@ -2,29 +2,20 @@
 
 # Agent hand-off
 
-Portable index for cross-session continuity. Keep rules, current state, history,
-and durable plans separate.
+Index for cross-session continuity. Operating procedure and authority are defined
+only in [`AGENTS/README.md`](../README.md).
 
 ## Read in this order
 
-1. [`AGENTS/README.md`](../README.md) — operating instructions.
+1. [`AGENTS/README.md`](../README.md) — procedure, portability, and authority.
 2. [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](SESSION_CONTEXT.md) — current semantic
-   state and next action.
-3. [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md) — authoritative plan status.
+   state and next direction.
+3. [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md) — registered plan status.
 4. [`AGENTS/HAND-OFF/SESSION_LOG.md`](SESSION_LOG.md) — historical outcomes only
    when earlier context is needed.
 
-## Portable identifiers
+## Content boundaries
 
-- `GitHub_User` — owner derived from `origin`.
-- `repo` — repository derived from the working-copy root.
-- `branch` — current branch derived from Git.
-
-Never commit resolved identifier values to portable agent documents.
-
-## Boundaries
-
-- Instructions belong in [`AGENTS/README.md`](../README.md).
 - Current state belongs in
   [`AGENTS/HAND-OFF/SESSION_CONTEXT.md`](SESSION_CONTEXT.md).
 - Historical outcomes belong in
@@ -32,5 +23,5 @@ Never commit resolved identifier values to portable agent documents.
 - Durable decisions belong under [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md).
 - Tool behavior belongs in [`SRC/tools/README.md`](../../SRC/tools/README.md).
 
-If documents conflict, derive repository reality with Git and self-description,
-then repair the lower-authority context or history file.
+If context or history conflicts with higher-authority sources, derive reality and
+repair the lower-authority file.

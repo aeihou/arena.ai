@@ -43,8 +43,9 @@ finding without Git archaeology.
 ## Update rule
 
 For meaningful work, validate first, rewrite current context, append one concise
-log entry, and commit both with the implementation. Minor edits that do not alter
-next-agent understanding need no log entry.
+log entry with the next strictly increasing `Revision`, and make rolling
+`Log revision` match it. Commit context and implementation together. Minor edits
+that do not alter next-agent understanding need no log entry.
 
 If context conflicts with the working copy or a detailed plan, derive reality,
 treat the plan registry as authoritative for plan state, and repair context.
@@ -54,6 +55,9 @@ treat the plan registry as authoritative for plan state, and repair context.
 - A new agent can identify the latest outcome, validation state, and next
   direction without conversation history.
 - Rolling context contains no obsolete history or duplicated plan state.
-- Log entries remain short, semantic, and append-only.
+- Log entries remain short, semantic, append-only, uniquely numbered, and
+  strictly increasing.
+- Rolling `Log revision` equals the newest log `Revision`, including same-day
+  updates.
 - Runtime metadata is absent.
 - Context and implementation ship together and pass repository verification.

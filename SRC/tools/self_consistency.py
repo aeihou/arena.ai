@@ -545,11 +545,17 @@ def _document_date(value: str | None) -> date | None:
         return None
 
 
+def _positive_integer(value: str | None) -> int | None:
+    if value is None or not value.isdigit() or int(value) < 1:
+        return None
+    return int(value)
+
+
 def check_session_tracking(root: Path) -> list[Finding]:
     """Validate rolling-context and compact-log schemas by their headings."""
     findings: list[Finding] = []
-    rolling: list[tuple[Path, date | None]] = []
-    logs: list[tuple[Path, list[date]]] = []
+    rolling: list[tuple[Path, date | None, int | None]] = []
+    logs: list[tuple[Path, list[date], list[int]]] = []
     required_context_sections = (
         "Latest outcome",
         "Current state",
@@ -562,7 +568,8 @@ def check_session_tracking(root: Path) -> list[Finding]:
         text = _read_text(path) or ""
         if re.search(r"^# Rolling session context\s*$", text, re.MULTILINE):
             updated = _document_date(_metadata(text, "Updated"))
-            rolling.append((path, updated))
+            revision = _positive_integer(_metadata(text, "Log revision"))
+            rolling.append((path, updated, revision))
             if updated is None:
                 findings.append(
                     Finding(
@@ -570,6 +577,15 @@ def check_session_tracking(root: Path) -> list[Finding]:
                         path.relative_to(root).as_posix(),
                         0,
                         "add valid ISO date metadata '- **Updated:** YYYY-MM-DD'",
+                    )
+                )
+            if revision is None:
+                findings.append(
+                    Finding(
+                        "invalid-context-revision",
+                        path.relative_to(root).as_posix(),
+                        0,
+                        "add positive integer metadata '- **Log revision:** N'",
                     )
                 )
             for heading in required_context_sections:
@@ -584,7 +600,12 @@ def check_session_tracking(root: Path) -> list[Finding]:
                     )
         if re.search(r"^# Compact session log\s*$", text, re.MULTILINE):
             entry_dates: list[date] = []
-            entries = list(re.finditer(r"^## (\d{4}-\d{2}-\d{2})\s+—[^\n]+$", text, re.MULTILINE))
+            revisions: list[int] = []
+            entries = list(
+                re.finditer(
+                    r"^## (\d{4}-\d{2}-\d{2})\s+—[^\n]+$", text, re.MULTILINE
+                )
+            )
             if not entries:
                 findings.append(
                     Finding(
@@ -600,22 +621,50 @@ def check_session_tracking(root: Path) -> list[Finding]:
                     entry_dates.append(parsed)
                 end = entries[index + 1].start() if index + 1 < len(entries) else len(text)
                 body = text[entry.end() : end]
-                for field in ("Outcome", "Decisions", "Validation"):
-                    if not re.search(r"^- \*\*{}:\*\*\s+.+".format(field), body, re.MULTILINE):
+                for field in ("Revision", "Outcome", "Decisions", "Validation"):
+                    if not re.search(
+                        r"^- \*\*{}:\*\*\s+.+".format(field), body, re.MULTILINE
+                    ):
                         findings.append(
                             Finding(
                                 "missing-log-field",
                                 path.relative_to(root).as_posix(),
                                 0,
-                                "entry {!r} needs **{}:**".format(entry.group(0)[3:], field),
+                                "entry {!r} needs **{}:**".format(
+                                    entry.group(0)[3:], field
+                                ),
                             )
                         )
-            logs.append((path, entry_dates))
-    for context_path, updated in rolling:
+                entry_revision = _positive_integer(_metadata(body, "Revision"))
+                if entry_revision is not None:
+                    revisions.append(entry_revision)
+            if len(revisions) == len(entries) and any(
+                current <= previous
+                for previous, current in zip(revisions, revisions[1:])
+            ):
+                findings.append(
+                    Finding(
+                        "nonmonotonic-log-revision",
+                        path.relative_to(root).as_posix(),
+                        0,
+                        "log revisions must be unique and strictly increasing",
+                    )
+                )
+            logs.append((path, entry_dates, revisions))
+    for context_path, updated, revision in rolling:
         sibling_logs = [
-            dates for log_path, dates in logs if log_path.parent == context_path.parent
+            (dates, revisions)
+            for log_path, dates, revisions in logs
+            if log_path.parent == context_path.parent
         ]
-        sibling_dates = [entry_date for dates in sibling_logs for entry_date in dates]
+        sibling_dates = [
+            entry_date for dates, _ in sibling_logs for entry_date in dates
+        ]
+        sibling_revisions = [
+            entry_revision
+            for _, revisions in sibling_logs
+            for entry_revision in revisions
+        ]
         if not sibling_logs:
             findings.append(
                 Finding(
@@ -632,6 +681,15 @@ def check_session_tracking(root: Path) -> list[Finding]:
                     context_path.relative_to(root).as_posix(),
                     0,
                     "context date predates the newest compact-log entry",
+                )
+            )
+        if revision and sibling_revisions and revision != max(sibling_revisions):
+            findings.append(
+                Finding(
+                    "context-log-revision-mismatch",
+                    context_path.relative_to(root).as_posix(),
+                    0,
+                    "context Log revision must equal the newest log Revision",
                 )
             )
     return findings

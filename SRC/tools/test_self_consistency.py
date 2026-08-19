@@ -186,6 +186,49 @@ class VerifierTests(unittest.TestCase):
         self.assertIn("missing-log-field", codes)
         self.assertIn("stale-session-context", codes)
 
+    def test_reports_same_day_context_revision_drift(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        handoff = root / "AGENTS" / "HAND-OFF"
+        handoff.mkdir(parents=True)
+        (handoff / "SESSION_CONTEXT.md").write_text(
+            "# Rolling session context\n\n- **Updated:** 2026-08-19\n"
+            "- **Log revision:** 1\n\n"
+            "## Latest outcome\n\nDone.\n\n## Current state\n\nClean.\n\n"
+            "## Validation baseline\n\nPassed.\n\n## Next agent\n\nContinue.\n",
+            encoding="utf-8",
+        )
+        (handoff / "SESSION_LOG.md").write_text(
+            "# Compact session log\n\n"
+            "## 2026-08-19 — One\n\n- **Revision:** 1\n"
+            "- **Outcome:** One.\n- **Decisions:** One.\n- **Validation:** One.\n\n"
+            "## 2026-08-19 — Two\n\n- **Revision:** 2\n"
+            "- **Outcome:** Two.\n- **Decisions:** Two.\n- **Validation:** Two.\n",
+            encoding="utf-8",
+        )
+
+        codes = {finding.code for finding in verifier.check_session_tracking(root)}
+
+        self.assertIn("context-log-revision-mismatch", codes)
+
+    def test_reports_nonmonotonic_log_revisions(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        handoff = root / "AGENTS" / "HAND-OFF"
+        handoff.mkdir(parents=True)
+        (handoff / "SESSION_LOG.md").write_text(
+            "# Compact session log\n\n"
+            "## 2026-08-19 — Two\n\n- **Revision:** 2\n"
+            "- **Outcome:** Two.\n- **Decisions:** Two.\n- **Validation:** Two.\n\n"
+            "## 2026-08-19 — One\n\n- **Revision:** 1\n"
+            "- **Outcome:** One.\n- **Decisions:** One.\n- **Validation:** One.\n",
+            encoding="utf-8",
+        )
+
+        codes = {finding.code for finding in verifier.check_session_tracking(root)}
+
+        self.assertIn("nonmonotonic-log-revision", codes)
+
     def test_reports_hardcoded_current_branch(self) -> None:
         temporary, root = self.make_repo()
         self.addCleanup(temporary.cleanup)
