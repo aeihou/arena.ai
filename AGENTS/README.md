@@ -1,6 +1,4 @@
-# AI instructions
-
-Authoritative operating instructions for Arena agents.
+# A8 instructions for agents.
 
 Subfolders:
 - [`HAND-OFF/`](HAND-OFF/) — concise state and learned constraints for the next
@@ -32,4 +30,5 @@ before applying structural decisions.
 - Commit.
 - Push to GitHub `GitHub_User/repo` on the current `branch`.
 
-Any questions? `askDev`.
+## Any questions? 
+> `askDev`.
