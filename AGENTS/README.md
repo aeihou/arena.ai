@@ -12,10 +12,6 @@ Subfolders:
 
 ### Update GitHub `GitHub_User/repo`
 
-### Reload hand-off
-Read [`AGENTS/HAND-OFF/README.md`](HAND-OFF/README.md), infer semantic intent, and
-continue from current repository reality.
-
 ### `self.consistency.selfDescribe()`
 Run `python3 SRC/tools/self_consistency.py --describe` to derive the current
 branch, inventory, and top-level purposes from the working copy.
