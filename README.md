@@ -17,4 +17,11 @@ Workspace of **AEIHOU and his pet AIbOT**.
 
 
 ## README.md 
-EL AGENTE está encargado de actualizar archivos y directorios al finalizar cada respuesta, commit, push, github aeihou/arena.ai arena'sbranch
+
+## Antesdepensar(
+  EL AGENTE está encargado de actualizar archivos y directorios segun su consistencia 
+
+
+## al finalizar cada respuesta(
+   commit, push, 
+   to github aeihou/arena.ai arena'sbranch
