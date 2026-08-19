@@ -1,17 +1,19 @@
 # Rolling session context
 
 - **Updated:** 2026-08-19
-- **Log revision:** 7
+- **Log revision:** 8
 - **Purpose:** Minimal semantic state for the next agent.
 
 ## Latest outcome
 
-- Established a durable active goal: self-description, portable session hand-off,
-  dynamic growth, and machine-enforced consistency.
-- Extended self-description to enumerate every relevant directory and its
-  canonical descriptor as well as every relevant file.
-- Added a growth protocol that couples structure, descriptors, registries,
-  context, tests, and validation.
+- Added [`SRC/tools/script.sh`](../../SRC/tools/script.sh), a parametrizable
+  folder self-constructor that writes the canonical descriptor, indexes the
+  parent, and reloads session state.
+- Executed it for the first time to self-construct
+  [`DOCS/PLAN/SELF_CONSTRUCTOR/README.md`](../../DOCS/PLAN/SELF_CONSTRUCTOR/README.md),
+  which the reload immediately validated against registry and index guards.
+- Kept the active self-describing goal, its growth protocol, and dynamic
+  discovery unchanged.
 
 ## Current state
 
@@ -19,6 +21,7 @@
 - Active goal:
   [`DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md`](../../DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md)
 - Plan status: [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md)
+- Growth tooling: [`SRC/tools/README.md`](../../SRC/tools/README.md)
 - Historical outcomes: [`AGENTS/HAND-OFF/SESSION_LOG.md`](SESSION_LOG.md)
 
 ## Validation baseline
@@ -33,3 +36,5 @@
 2. Use the active self-describing-repository goal to prioritize optimizations.
 3. Preserve dynamic discovery; do not introduce static inventories or duplicated
    sources of truth.
+4. Create new folders with `SRC/tools/script.sh` so descriptors, parent indexes,
+   and validation stay coupled.

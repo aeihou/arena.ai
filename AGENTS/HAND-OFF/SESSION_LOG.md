@@ -70,3 +70,16 @@ derived rather than recorded here.
   context, focused tests, and validation without static inventories.
 - **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
   checks pass.
+
+## 2026-08-19 — Folder self-constructor
+
+- **Revision:** 8
+- **Outcome:** Converted the developer self-constructor pseudocode into a
+  parametrizable Bash tool with focused tests and ran it for the first time to
+  create the plan folder that documents it.
+- **Decisions:** Construction writes descriptors and parent indexes only; the
+  reload re-derives Git and consistency reality without mutating session context,
+  logs, or plan status.
+- **Validation:** First execution reported the expected registry and index gaps,
+  and self-consistency, the complete suite, and whitespace checks pass after
+  registration.

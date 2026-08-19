@@ -27,6 +27,7 @@ lives only in the linked plan files.
 | [`DOCS/PLAN/SESSION_CONTEXT/README.md`](SESSION_CONTEXT/README.md) | Completed | Refresh rolling context and append compact outcomes with meaningful changes. |
 | [`DOCS/PLAN/CONSISTENCY_GUARDS/README.md`](CONSISTENCY_GUARDS/README.md) | Completed | Preserve generic heading-driven plan and context checks. |
 | [`DOCS/PLAN/SELF_DESCRIBING_REPOSITORY/README.md`](SELF_DESCRIBING_REPOSITORY/README.md) | Active | Use this goal to prioritize future repository optimization. |
+| [`DOCS/PLAN/SELF_CONSTRUCTOR/README.md`](SELF_CONSTRUCTOR/README.md) | Completed | Use the tool when adding folders so descriptors and indexes stay truthful. |
 | [`DOCS/PLAN/CONTINUOUS_VERIFICATION/README.md`](CONTINUOUS_VERIFICATION/README.md) | Blocked | Restore GitHub workflow permission, then activate the template. |
 | [`DOCS/PLAN/PG01/README.md`](PG01/README.md) | Deferred | Ask the developer for a concrete playground purpose. |
 
