@@ -1,10 +1,10 @@
 ## AI instructions
 ## EverytimeBeforeThink
 
-✓ update GitHub aeihou/arena.ai
-✓ self.consistency.selfDescribe()
-✓ self.consistency.verify()
-✓ PLAN Next Optimization 
+###update GitHub aeihou/arena.ai
+###self.consistency.selfDescribe()
+###self.consistency.verify()
+###PLAN Next Optimization 
 
 ## EverytimeAfterThink
   commit
