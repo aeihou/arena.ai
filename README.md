@@ -3,5 +3,5 @@
 Workspace of AEIHOU
 
 > 🤖 AI agent instructions 
-  ## CheckFirst
-  '/AGENTS/README.md'
+> ## CheckFirst
+> '/AGENTS/README.md'
