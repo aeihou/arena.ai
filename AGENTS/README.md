@@ -10,6 +10,8 @@ Run `python3 tools/self_consistency.py` and resolve every finding. Use
 Markdown report is needed.
 
 ### Plan next optimization
+Maintain the pending-plan section in `DOCS/PLAN/README.md`. Ask the developer
+before applying structural decisions.
 
 ## EverytimeAfterThink
 

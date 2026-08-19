@@ -6,11 +6,11 @@
 
 ## 1. What this repo is
 
-`aeihou/arena.ai` — workspace of **AEIHOU and his pet AIbOT**. It acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding. Working branch: `arena/01a019d9-arena-ai`.
+`aeihou/arena.ai` acts as persistent memory between AI sessions: each session reloads the repo before thinking and commits/pushes after responding. Work only on the Arena branch assigned to the current session.
 
 ## 2. Operating rules (CheckFirst → `AGENTS/README.md`)
 
-Before anything else, **always fetch GitHub first** (`git fetch origin arena/01a019d9-arena-ai`):
+Before anything else, **always fetch GitHub first** (`git fetch origin`):
 
 ### EverytimeBeforeThink
 - `update GitHub aeihou/arena.ai` — fetch + reload remote changes
@@ -53,11 +53,11 @@ arena.ai/
 ## 4. Skills learned this session (so far)
 
 ### Git workflow (reliable sync)
-- **Before thinking**: `git fetch origin arena/01a019d9-arena-ai` → check `git rev-list --count HEAD..FETCH_HEAD` → if behind, inspect `git diff HEAD FETCH_HEAD` and `git show FETCH_HEAD:<file>` → fast-forward (`git merge --ff-only FETCH_HEAD`).
+- **Before thinking**: fetch the current Arena branch → check `git rev-list --count HEAD..FETCH_HEAD` → if behind, inspect `git diff HEAD FETCH_HEAD` and `git show FETCH_HEAD:<file>` → fast-forward (`git merge --ff-only FETCH_HEAD`).
 - **After responding**: `git add -A && git commit` → fetch again → push; if remote advanced, `git rebase FETCH_HEAD` then push.
 - **Conflict resolution**: the user's GitHub edits are **authoritative**. Use `git checkout --ours <file>` for files the user changed, keep your changes only where they don't collide. Resume with `GIT_EDITOR=true git rebase --continue`.
-- **Tracking fix**: the repo's original fetch refspec only tracked `main`; it now tracks all branches (`+refs/heads/*:refs/remotes/origin/*`). Keep it that way.
-- **No PRs** unless explicitly asked. Push directly to `arena/01a019d9-arena-ai`.
+- **Cross-session updates**: inspect other remote Arena branches when the user asks to check broadly for updates; infer semantic intent rather than copying malformed or branch-specific text.
+- **No PRs** unless explicitly asked. Push only to the current session's assigned Arena branch.
 
 ### Self-consistency verification (self.consistency.verify)
 - Check for **broken links** (markdown refs to non-existent files).
@@ -82,10 +82,11 @@ arena.ai/
 
 ## 5. Pending work / next steps
 
-1. **PLAN FILE_STRUCTURE Optimization** (rule in `AGENTS/README.md`) — `DOCS/PLAN/FILE_STRUCTURE/` exists but is empty. Propose the optimization plan and get user approval before applying.
-2. **GITHUB/** purpose undefined — candidates: templates + workflows, or rename to `.github/` (GitHub convention). Ask user.
-3. **PG01/** is empty — decide whether it becomes a project workspace (e.g. `PG01/DOCS` + `PG01/SRC`).
-4. Keep enforcing: reload before thinking, commit+push after every response, self-consistency verification on each session.
+1. **PLAN FILE_STRUCTURE Optimization** — define an actionable structure plan in `DOCS/PLAN/FILE_STRUCTURE/` after developer approval.
+2. **Activate continuous verification** — install `GITHUB/self-consistency.yml` under `.github/workflows/` when GitHub workflow permissions are available.
+3. **PG01 purpose** — decide whether it becomes a project workspace (for example, `PG01/DOCS` plus `PG01/SRC`).
+4. Keep `DOCS/PLAN/README.md` current as plans are proposed, approved, completed, or superseded.
+5. Keep enforcing: reload before thinking, commit+push after every response, self-consistency verification on each session.
 
 ## 6. Golden rules recap
 

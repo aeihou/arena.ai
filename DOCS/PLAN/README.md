@@ -5,6 +5,19 @@ Plans & roadmap folder.
 Subfolders:
 - `FILE_STRUCTURE/` — file structure optimization plans.
 
+## Pending plans
+
+Agents maintain this section as plans are proposed, approved, completed, or
+superseded. Structural decisions require developer approval before changes are
+applied.
+
+1. **File-structure optimization** — document an actionable proposal in
+   `FILE_STRUCTURE/` and request developer approval.
+2. **Continuous verification** — install `GITHUB/self-consistency.yml` as an
+   active workflow when GitHub workflow permissions are available.
+3. **PG01 definition** — agree on the playground's purpose and whether it needs
+   dedicated source and documentation subfolders.
+
 ## Self-consistency report generation
 
 The portable verifier checks local Markdown links, canonical names, directory
