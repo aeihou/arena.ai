@@ -27,3 +27,12 @@ derived rather than recorded here.
   concise indexes and context.
 - **Validation:** Documentation links, verifier checks, tests, and whitespace
   checks pass.
+
+## 2026-08-19 — Portable consistency guards
+
+- **Outcome:** Added heading-driven validation for plan registries, plan metadata,
+  rolling context, and compact session logs.
+- **Decisions:** Infer policy from portable Markdown conventions instead of a
+  repository-specific configuration file.
+- **Validation:** New mismatch, malformed-entry, missing-section, and stale-context
+  fixtures pass with the complete verifier suite.

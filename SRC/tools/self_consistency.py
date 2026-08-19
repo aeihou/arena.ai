@@ -14,7 +14,7 @@ import re
 import subprocess
 import sys
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Iterable, Sequence
 from urllib.parse import unquote
@@ -417,6 +417,226 @@ def check_canonical_names(root: Path) -> list[Finding]:
     return findings
 
 
+def _section(text: str, heading: str) -> str:
+    """Return a level-two Markdown section body, or an empty string."""
+    match = re.search(
+        r"^## {}\s*$\n(.*?)(?=^## |\Z)".format(re.escape(heading)),
+        text,
+        flags=re.MULTILINE | re.DOTALL,
+    )
+    return match.group(1) if match else ""
+
+
+def _metadata(text: str, key: str) -> str | None:
+    match = re.search(
+        r"^- \*\*{}:\*\*\s*(.+?)\s*$".format(re.escape(key)),
+        text,
+        flags=re.MULTILINE,
+    )
+    return match.group(1) if match else None
+
+
+def check_plan_registries(root: Path) -> list[Finding]:
+    """Validate linked plan status against a portable Markdown registry."""
+    findings: list[Finding] = []
+    row_pattern = re.compile(
+        r"^\|\s*\[[^\]]+\]\(([^)]+)\)\s*\|\s*([^|]+?)\s*\|",
+        flags=re.MULTILINE,
+    )
+    status_pattern = re.compile(r"^\|\s*([^|]+?)\s*\|", flags=re.MULTILINE)
+    for path in iter_files(root):
+        if path.name != "README.md":
+            continue
+        text = _read_text(path) or ""
+        status_model = _section(text, "Status model")
+        registry = _section(text, "Registry")
+        if not status_model or not registry:
+            continue
+        allowed = {
+            match.group(1).strip()
+            for match in status_pattern.finditer(status_model)
+            if match.group(1).strip() not in {"Status", "---"}
+        }
+        registered: set[Path] = set()
+        for match in row_pattern.finditer(registry):
+            target = _link_target(match.group(1))
+            registry_status = match.group(2).strip()
+            if not target or target.startswith(("#", "/", "mailto:")) or "://" in target:
+                continue
+            destination = (path.parent / target).resolve()
+            if destination.is_dir():
+                destination = destination / "README.md"
+            if not destination.is_file():
+                continue  # Broken-link verification reports this first.
+            try:
+                relative = destination.relative_to(root).as_posix()
+            except ValueError:
+                continue
+            registered.add(destination)
+            detail = _read_text(destination) or ""
+            detail_status = _metadata(detail, "Status")
+            detail_date = _document_date(_metadata(detail, "Updated"))
+            if detail_date is None:
+                findings.append(
+                    Finding(
+                        "invalid-plan-date",
+                        relative,
+                        0,
+                        "add valid ISO date metadata '- **Updated:** YYYY-MM-DD'",
+                    )
+                )
+            if registry_status not in allowed:
+                findings.append(
+                    Finding(
+                        "invalid-plan-status",
+                        path.relative_to(root).as_posix(),
+                        0,
+                        "registry status {!r} is absent from the status model".format(
+                            registry_status
+                        ),
+                    )
+                )
+            if detail_status is None:
+                findings.append(
+                    Finding(
+                        "missing-plan-status",
+                        relative,
+                        0,
+                        "add '- **Status:** <status>' metadata",
+                    )
+                )
+            elif detail_status != registry_status:
+                findings.append(
+                    Finding(
+                        "plan-status-mismatch",
+                        relative,
+                        0,
+                        "detail status {!r} differs from registry status {!r}".format(
+                            detail_status, registry_status
+                        ),
+                    )
+                )
+        for child in sorted(path.parent.iterdir()):
+            detail = child / "README.md"
+            if (
+                child.is_dir()
+                and not child.name.startswith(".")
+                and not _is_ignored(child, root)
+                and detail.is_file()
+                and detail.resolve() not in registered
+            ):
+                findings.append(
+                    Finding(
+                        "unregistered-plan",
+                        detail.relative_to(root).as_posix(),
+                        0,
+                        "add this plan to the parent registry",
+                    )
+                )
+    return findings
+
+
+def _document_date(value: str | None) -> date | None:
+    if value is None:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        return None
+
+
+def check_session_tracking(root: Path) -> list[Finding]:
+    """Validate rolling-context and compact-log schemas by their headings."""
+    findings: list[Finding] = []
+    rolling: list[tuple[Path, date | None]] = []
+    logs: list[tuple[Path, list[date]]] = []
+    required_context_sections = (
+        "Latest outcome",
+        "Current state",
+        "Validation baseline",
+        "Next agent",
+    )
+    for path in iter_files(root):
+        if path.suffix.lower() != ".md":
+            continue
+        text = _read_text(path) or ""
+        if re.search(r"^# Rolling session context\s*$", text, re.MULTILINE):
+            updated = _document_date(_metadata(text, "Updated"))
+            rolling.append((path, updated))
+            if updated is None:
+                findings.append(
+                    Finding(
+                        "invalid-context-date",
+                        path.relative_to(root).as_posix(),
+                        0,
+                        "add valid ISO date metadata '- **Updated:** YYYY-MM-DD'",
+                    )
+                )
+            for heading in required_context_sections:
+                if not _section(text, heading).strip():
+                    findings.append(
+                        Finding(
+                            "missing-context-section",
+                            path.relative_to(root).as_posix(),
+                            0,
+                            "add non-empty '## {}' section".format(heading),
+                        )
+                    )
+        if re.search(r"^# Compact session log\s*$", text, re.MULTILINE):
+            entry_dates: list[date] = []
+            entries = list(re.finditer(r"^## (\d{4}-\d{2}-\d{2})\s+—[^\n]+$", text, re.MULTILINE))
+            if not entries:
+                findings.append(
+                    Finding(
+                        "missing-log-entry",
+                        path.relative_to(root).as_posix(),
+                        0,
+                        "add at least one '## YYYY-MM-DD — title' entry",
+                    )
+                )
+            for index, entry in enumerate(entries):
+                parsed = _document_date(entry.group(1))
+                if parsed:
+                    entry_dates.append(parsed)
+                end = entries[index + 1].start() if index + 1 < len(entries) else len(text)
+                body = text[entry.end() : end]
+                for field in ("Outcome", "Decisions", "Validation"):
+                    if not re.search(r"^- \*\*{}:\*\*\s+.+".format(field), body, re.MULTILINE):
+                        findings.append(
+                            Finding(
+                                "missing-log-field",
+                                path.relative_to(root).as_posix(),
+                                0,
+                                "entry {!r} needs **{}:**".format(entry.group(0)[3:], field),
+                            )
+                        )
+            logs.append((path, entry_dates))
+    for context_path, updated in rolling:
+        sibling_logs = [
+            dates for log_path, dates in logs if log_path.parent == context_path.parent
+        ]
+        sibling_dates = [entry_date for dates in sibling_logs for entry_date in dates]
+        if not sibling_logs:
+            findings.append(
+                Finding(
+                    "missing-session-log",
+                    context_path.relative_to(root).as_posix(),
+                    0,
+                    "add a sibling compact session log",
+                )
+            )
+        if updated and sibling_dates and max(sibling_dates) > updated:
+            findings.append(
+                Finding(
+                    "stale-session-context",
+                    context_path.relative_to(root).as_posix(),
+                    0,
+                    "context date predates the newest compact-log entry",
+                )
+            )
+    return findings
+
+
 def check_branch_references(root: Path) -> list[Finding]:
     """Prevent the current branch value from leaking into portable Markdown."""
     branch = _current_branch(root)
@@ -450,6 +670,8 @@ def verify(root: Path) -> list[Finding]:
         check_folder_indexes,
         check_stale_placeholders,
         check_canonical_names,
+        check_plan_registries,
+        check_session_tracking,
         check_branch_references,
         check_formatting,
     )

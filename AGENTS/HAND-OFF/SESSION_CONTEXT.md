@@ -5,10 +5,11 @@
 
 ## Latest outcome
 
-- Audited documentation for duplicated, irrelevant, redundant, stale, and
-  misplaced content.
-- Rebuilt the hand-off and completed-plan records around single sources of truth.
-- Removed the stale static repository tree and repeated operating procedures.
+- Consolidated documentation around canonical sources and removed stale or
+  repeated guidance.
+- Added portable, heading-driven guards for plan status and session tracking.
+- Added fixtures for plan mismatch, malformed log entries, missing context
+  sections, and stale rolling context.
 
 ## Current state
 
@@ -26,7 +27,7 @@
 ## Next agent
 
 1. Follow [`AGENTS/README.md`](../README.md).
-2. Treat [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md) as authoritative for
-   blocked and deferred work.
-3. Continue from the latest developer request; do not recreate removed duplicate
-   guidance or static state.
+2. Preserve heading-driven plan and context schemas documented in
+   [`DOCS/PLAN/CONSISTENCY_GUARDS/README.md`](../../DOCS/PLAN/CONSISTENCY_GUARDS/README.md).
+3. Continue from the latest developer request without recreating duplicate or
+   static guidance.

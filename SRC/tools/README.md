@@ -29,10 +29,12 @@ structure.
 
 ## Enforced rules
 
-The verifier checks local links, README path declarations and link names, folder
-descriptors and child indexes, placeholders, portable branch references, generic
-canonical naming, whitespace, and final newlines. Interactive mode can safely fix
-README paths, README links, and text formatting.
+The verifier checks local links, README contracts, folder indexes, placeholders,
+portable branch references, plan registry/detail agreement, rolling context,
+compact log entries, canonical naming, whitespace, and final newlines. Plan and
+context rules are discovered from semantic Markdown headings rather than fixed
+repository paths. Interactive mode can safely fix README paths, README links, and
+text formatting.
 
 Exit status is `0` for success, `1` for findings, and `2` for usage or environment
 errors.

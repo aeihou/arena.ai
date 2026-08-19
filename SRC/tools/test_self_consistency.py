@@ -138,6 +138,54 @@ class VerifierTests(unittest.TestCase):
         self.assertIn("missing-final-newline", codes)
         self.assertIn("stale-gitkeep", codes)
 
+    def test_reports_plan_registry_status_mismatch(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        plan = root / "DOCS" / "PLAN"
+        detail = plan / "ITEM"
+        detail.mkdir(parents=True)
+        (plan / "README.md").write_text(
+            "/DOCS/PLAN/README.md\n\n# Plans\n\n"
+            "## Status model\n\n| Status | Meaning |\n|---|---|\n"
+            "| Proposed | Not approved. |\n| Completed | Done. |\n\n"
+            "## Registry\n\n| Plan | Status | Next action |\n|---|---|---|\n"
+            "| [`DOCS/PLAN/ITEM/README.md`](ITEM/README.md) | Completed | None. |\n",
+            encoding="utf-8",
+        )
+        (detail / "README.md").write_text(
+            "/DOCS/PLAN/ITEM/README.md\n\n# Item\n\n"
+            "- **Status:** Proposed\n- **Updated:** 2026-08-19\n",
+            encoding="utf-8",
+        )
+
+        findings = verifier.check_plan_registries(root)
+
+        self.assertTrue(any(finding.code == "plan-status-mismatch" for finding in findings))
+
+    def test_reports_stale_or_malformed_session_tracking(self) -> None:
+        temporary, root = self.make_repo()
+        self.addCleanup(temporary.cleanup)
+        handoff = root / "AGENTS" / "HAND-OFF"
+        handoff.mkdir(parents=True)
+        (handoff / "SESSION_CONTEXT.md").write_text(
+            "# Rolling session context\n\n- **Updated:** 2026-08-18\n\n"
+            "## Latest outcome\n\nDone.\n\n"
+            "## Validation baseline\n\nPassed.\n\n"
+            "## Next agent\n\nContinue.\n",
+            encoding="utf-8",
+        )
+        (handoff / "SESSION_LOG.md").write_text(
+            "# Compact session log\n\n## 2026-08-19 — Test\n\n"
+            "- **Outcome:** Done.\n- **Decisions:** Keep it.\n",
+            encoding="utf-8",
+        )
+
+        codes = {finding.code for finding in verifier.check_session_tracking(root)}
+
+        self.assertIn("missing-context-section", codes)
+        self.assertIn("missing-log-field", codes)
+        self.assertIn("stale-session-context", codes)
+
     def test_reports_hardcoded_current_branch(self) -> None:
         temporary, root = self.make_repo()
         self.addCleanup(temporary.cleanup)
