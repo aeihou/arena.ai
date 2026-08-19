@@ -119,6 +119,8 @@ class VerifierTests(unittest.TestCase):
 
         self.assertEqual(root.name, description.name)
         self.assertIn(("SRC/", "Source workspaces."), description.sections)
+        self.assertEqual(("README.md", "SRC/README.md"), description.file_paths)
+        self.assertIn("Files:\n- README.md\n- SRC/README.md", verifier.description_text(description))
         self.assertEqual(2, description.files)
 
     def test_reports_formatting_and_stale_placeholder(self) -> None:

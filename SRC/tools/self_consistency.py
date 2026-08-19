@@ -78,6 +78,7 @@ class RepositoryDescription:
     branch: str | None
     directories: int
     files: int
+    file_paths: tuple[str, ...]
     sections: tuple[tuple[str, str], ...]
 
 
@@ -164,6 +165,7 @@ def describe_repository(root: Path) -> RepositoryDescription:
         branch=_current_branch(root),
         directories=len(directories),
         files=len(files),
+        file_paths=tuple(path.relative_to(root).as_posix() for path in files),
         sections=sections,
     )
 
@@ -178,6 +180,8 @@ def description_text(description: RepositoryDescription) -> str:
         "Top-level sections:",
     ]
     lines.extend("- {} {}".format(name, summary) for name, summary in description.sections)
+    lines.append("Files:")
+    lines.extend("- {}".format(path) for path in description.file_paths)
     return "\n".join(lines)
 
 

@@ -12,11 +12,15 @@ Run the zero-dependency verifier from the repository root:
 python3 SRC/tools/self_consistency.py
 ```
 
-Derive a smart repository inventory and verify it in one command:
+Derive the branch, inventory counts, top-level purposes, and complete file list,
+then verify the repository in one command:
 
 ```sh
 python3 SRC/tools/self_consistency.py --describe
 ```
+
+The same inventory is available as `description.file_paths` with
+`--describe --format json`.
 
 For grouped, developer-approved safe fixes followed by an optional Markdown
 report:

@@ -31,8 +31,9 @@ semantic intent. Do not copy malformed, stale, or branch-specific text.
 
 ## Current capabilities
 
-- `SRC/tools/self_consistency.py` provides portable local verification, grouped
-  developer-approved safe fixes, JSON output, and Markdown reports.
+- `SRC/tools/self_consistency.py` provides a complete relevant-file inventory,
+  portable local verification, grouped developer-approved safe fixes, JSON
+  output, and Markdown reports.
 - `SRC/tools/test_self_consistency.py` covers the verifier with standard-library
   tests.
 - `GITHUB/self-consistency.yml` is an inactive GitHub Actions template because

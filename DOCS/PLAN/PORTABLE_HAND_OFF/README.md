@@ -3,7 +3,7 @@
 # Portable agent hand-off
 
 - **Status:** Completed
-- **Revision:** 2
+- **Revision:** 3
 - **Updated:** 2026-08-19
 - **Outcome:** Agent context can move between repositories and sessions without
   persisting account, repository, or branch values.
@@ -46,8 +46,11 @@ Do not duplicate a source of truth. Link to it by repository-relative file name.
 
 1. Fetch `origin` without embedding a branch value in documentation.
 2. Read [`AGENTS/README.md`](../../../AGENTS/README.md).
-3. Read [`AGENTS/HAND-OFF/README.md`](../../../AGENTS/HAND-OFF/README.md).
-4. Run `python3 SRC/tools/self_consistency.py --describe`.
+3. Run `python3 SRC/tools/self_consistency.py --describe` to discover every file
+   as well as repository purpose and counts.
+4. Read the files relevant to the task. Include
+   [`AGENTS/HAND-OFF/README.md`](../../../AGENTS/HAND-OFF/README.md) when
+   continuing inter-session state.
 5. Run `python3 SRC/tools/self_consistency.py` and resolve findings.
 6. Read [`DOCS/PLAN/README.md`](../README.md) for blocked, deferred, and active
    decisions.
@@ -131,6 +134,8 @@ artifacts do not dirty Git status.
 - Every internal README link displays the linked repository-relative file name
   and targets the file directly.
 - Runtime state is derived from Git and the working copy.
+- Self-description enumerates every relevant repository file instead of only
+  reporting counts and top-level folders.
 - The hand-off links to canonical instructions and detailed plans instead of
   duplicating them.
 - Developer approval gates structural changes and grouped safe fixes.
@@ -155,3 +160,5 @@ When this contract changes:
 - **Revision 2:** rebuilt the plan as an executable portability contract with a
   load sequence, source boundaries, rebuild procedure, interaction safeguards,
   validation sequence, and change protocol.
+- **Revision 3:** made self-description enumerate the complete relevant file set
+  and changed loading from a hardcoded hand-off step to task-driven discovery.

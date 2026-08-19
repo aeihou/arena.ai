@@ -14,7 +14,8 @@ Subfolders:
 
 ### `self.consistency.selfDescribe()`
 Run `python3 SRC/tools/self_consistency.py --describe` to derive the current
-branch, inventory, and top-level purposes from the working copy.
+branch, inventory counts, top-level purposes, and complete file list from the
+working copy.
 
 ### `self.consistency.verify()`
 Run `python3 SRC/tools/self_consistency.py` and resolve every finding. Use
