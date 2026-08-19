@@ -1,6 +1,6 @@
 # arena.ai
 
-Workspace of **AWIHOU and his pet AIbOT**.
+Workspace of **AEIHOU and his pet AIbOT**.
 
 > 🤖 AI agent instructions (sync rules, createPR confirmation) live in [`AGENTS.md`](AGENTS.md).
 
@@ -12,9 +12,9 @@ Workspace of **AWIHOU and his pet AIbOT**.
 | `AEIHOU` | Owner (AEIHOU) docs          | `AEIHOU.md`     |
 | `PG01`   | Playground 01                | `README.md`     |
 | `DOCS`   | Documentation                | `README.md`     |
-| `SRC`    | Source / workspaces          | `SRC.README.md` |
+| `SRC`    | Source / workspaces          | `README.md`     |
 | `GITHUB` | GitHub-related files         | `README.md`     |
 
 
 ## README.md 
-EL AGENTE está encargado de actualizar archivos y directorios al finalizar cada respuesta, commit, push, github aeihou/agents.ai arena'sbranch
+EL AGENTE está encargado de actualizar archivos y directorios al finalizar cada respuesta, commit, push, github aeihou/arena.ai arena'sbranch
