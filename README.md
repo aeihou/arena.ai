@@ -1,8 +1,10 @@
-# arena.ai
+/README.md
 
 Workspace of **AEIHOU and his pet AIbOT**.
 
 > 🤖 AI agent instructions (reload-before-thinking, sync rules) live in [`AGENTS/README.md`](AGENTS/README.md).
 
-## `AGENTS` AI instructions #CheckFirst
 
+---
+## CheckFirst
+/AGENTS/README.md
