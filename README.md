@@ -19,7 +19,7 @@ Workspace of **AEIHOU and his pet AIbOT**.
 ## README.md 
 
 ## Antesdepensar(
-  EL AGENTE está encargado de actualizar archivos y directorios para que la estructura de archivo sea consistente.
+  EL AGENTE está encargado de actualizar archivos y directorios para que la estructura de archivo sea consistente.verify self-consistency selfDescribe
 
 
 ## al finalizar cada respuesta(
