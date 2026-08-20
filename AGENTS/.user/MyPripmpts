@@ -1,0 +1,11 @@
+# MyPripmpts
+
+Append-only developer prompt history. Agents append each new developer prompt
+here. Do not log system text, tool output, or resolved `GitHub_User`, `repo`, or
+`branch` values.
+
+## 2026-08-19
+
+- Agent, hand-off, init
+- As your first run for this repo, what would you optimize
+- NewFolder(/AGENTS/.user/).NewFile(MyPripmpts).LogmyPromptHistory();

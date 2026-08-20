@@ -80,3 +80,13 @@ derived rather than recorded here.
   `origin/branch`; a missing remote `branch` is local-only, not a blocker.
 - **Validation:** Self-consistency, full tests, Python grammar, and Git
   whitespace checks pass.
+
+## 2026-08-19 — User prompt history
+
+- **Revision:** 9
+- **Outcome:** Added `AGENTS/.user/MyPripmpts` and logged this session's
+  developer prompts.
+- **Decisions:** Keep the developer-chosen path and filename; append prompts
+  there; omit system, tool, and resolved identity text.
+- **Validation:** Self-consistency, full tests, Python grammar, and Git
+  whitespace checks pass.

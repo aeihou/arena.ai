@@ -116,6 +116,12 @@ corrections need no new log entry.
    and push only the assigned `branch` to `GitHub_User/repo`. The first push
    creates the remote `branch` when it was absent.
 
+## User prompt history
+
+Append each developer prompt to
+[`AGENTS/.user/MyPripmpts`](.user/MyPripmpts). Do not log system or tool text.
+Do not record resolved `GitHub_User`, `repo`, or `branch` values.
+
 ## Questions
 
 Use `askDev` before guessing about intent, authority, structure, or destructive
