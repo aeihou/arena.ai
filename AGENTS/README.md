@@ -36,6 +36,19 @@ When information conflicts, use this order:
 Preserve the semantic intent of remote developer edits during conflict
 resolution. Use `askDev` when intent is ambiguous; never silently overwrite it.
 
+## Before thinking
+
+Before Git reconciliation, planning, or implementation, append the current
+developer prompt:
+
+```sh
+python3 SRC/tools/user_prompts.py before-thinking
+```
+
+The function is `BeforeThinking.Add(new Prompt)`. Protocol:
+[`AGENTS/.user/BeforeThinking.MyPrompts.md`](.user/BeforeThinking.MyPrompts.md).
+Store: [`AGENTS/.user/MyPrompts.md`](.user/MyPrompts.md).
+
 ## Before work
 
 ### 1. Establish Git state

@@ -22,6 +22,7 @@ only in [`AGENTS/README.md`](../README.md).
   [`AGENTS/HAND-OFF/SESSION_LOG.md`](SESSION_LOG.md).
 - Durable decisions belong under [`DOCS/PLAN/README.md`](../../DOCS/PLAN/README.md).
 - Tool behavior belongs in [`SRC/tools/README.md`](../../SRC/tools/README.md).
+- Developer prompts belong in [`AGENTS/.user/MyPrompts.md`](../.user/MyPrompts.md).
 
 If context or history conflicts with higher-authority sources, derive reality and
 repair the lower-authority file.

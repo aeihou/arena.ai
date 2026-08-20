@@ -80,3 +80,13 @@ derived rather than recorded here.
   approval before creating a top-level folder.
 - **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
   checks pass.
+
+## 2026-08-19 — Developer prompt store
+
+- **Revision:** 9
+- **Outcome:** Added `AGENTS/.user/` with an append-only MyPrompts store and a
+  BeforeThinking.Add(new Prompt) hook that records each request first.
+- **Decisions:** Keep developer prompts out of portable session context; record
+  them verbatim in the user store before other work.
+- **Validation:** Self-consistency, full tests, Python grammar, and Git whitespace
+  checks pass.

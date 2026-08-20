@@ -43,6 +43,21 @@ repository-absolute first line, and lists the child in the parent descriptor.
 Top-level folders are structural and require `--approve-structure`. Exit status
 is `0` for success and `2` for a rejected request.
 
+## BeforeThinking prompts
+
+Record the current developer prompt before any other work:
+
+```sh
+python3 SRC/tools/user_prompts.py before-thinking
+python3 SRC/tools/user_prompts.py before-thinking "verbatim prompt"
+python3 SRC/tools/user_prompts.py add "verbatim prompt"
+```
+
+`before-thinking` and `add` both implement `Add(new Prompt)` and append
+[`AGENTS/.user/MyPrompts.md`](../../AGENTS/.user/MyPrompts.md). Stdin is required
+when the prompt text is omitted. Exit status is `0` for success and `2` for a
+rejected request.
+
 ## Enforced rules
 
 The verifier checks local links, README contracts, folder indexes, placeholders,
