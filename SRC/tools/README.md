@@ -50,12 +50,43 @@ SRC/tools/script.sh --parent DOCS/PLAN --descriptor readme \
 SRC/tools/script.sh --index skip --no-reload NAME OTHER
 ```
 
-Options: `--root`, `--parent`, `--descriptor {self,readme}`, `--title`,
+Options: `--root`, `--parent`, `--descriptor {self,readme,none}`, `--title`,
 `--summary`, `--metadata "Key: Value"` (repeatable), `--index {auto,skip}`,
 `--force`, `--dry-run`, `--describe`, `--no-reload`, `--help`. Existing
 descriptors are preserved unless `--force` is given, and the reload never
-rewrites session context, logs, or plan status. Exit status matches the verifier:
-`0` success, `1` reload findings, `2` usage or environment errors.
+rewrites session context, logs, or plan status. Hidden names such as `.user` are
+allowed and stay out of the parent index, because descriptor and index rules only
+apply to visible folders. Exit status matches the verifier: `0` success, `1`
+reload findings, `2` usage or environment errors.
+
+## Prompt capture
+
+`before_thinking.sh` implements `BeforeThinking.Add(new Prompt)`. It appends a
+verbatim developer prompt to the private store `AGENTS/.user/MyPrompts.md` before
+an agent starts reasoning.
+
+```sh
+# Command form
+SRC/tools/before_thinking.sh "the developer prompt"
+
+# Multi-line prompts
+SRC/tools/before_thinking.sh --stdin <<'PROMPT'
+first line
+second line
+PROMPT
+
+# Function form
+source SRC/tools/before_thinking.sh
+BeforeThinking.Add "the developer prompt"
+
+# Review the store
+SRC/tools/before_thinking.sh --list
+```
+
+Options: `--root`, `--file`, `--session`, `--stdin`, `--list`, `--dry-run`,
+`--verify`, `--help`. Prompts are grouped under a `## Session <date>` heading and
+numbered across the file; only trailing blanks are normalized. Re-adding the
+newest prompt is a no-op, so replaying a capture is safe.
 
 ## Enforced rules
 
@@ -75,5 +106,5 @@ errors.
 python3 -m unittest discover -s SRC/tools -p 'test_*.py'
 ```
 
-`test_self_consistency.py` covers the verifier and `test_script.py` covers folder
-self-construction.
+`test_self_consistency.py` covers the verifier, `test_script.py` covers folder
+self-construction, and `test_before_thinking.py` covers prompt capture.

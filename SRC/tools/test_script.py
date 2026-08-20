@@ -141,12 +141,38 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(1, result.returncode, result.stdout + result.stderr)
         self.assertIn("unlisted-subfolder", result.stdout)
 
+    def test_hidden_folder_is_created_without_index_or_descriptor(self) -> None:
+        root = self.make_repo()
+        before = (root / "README.md").read_text(encoding="utf-8")
+
+        result = self.run_script(
+            root, "--parent", "SRC", "--descriptor", "none", ".private"
+        )
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertTrue((root / "SRC" / ".private").is_dir())
+        self.assertEqual([], list((root / "SRC" / ".private").iterdir()))
+        self.assertEqual(before, (root / "README.md").read_text(encoding="utf-8"))
+        self.assertNotIn(
+            ".private/", (root / "SRC" / "README.md").read_text(encoding="utf-8")
+        )
+
+    def test_hidden_folder_keeps_a_descriptor_out_of_the_parent_index(self) -> None:
+        root = self.make_repo()
+
+        result = self.run_script(root, ".user")
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        self.assertTrue((root / ".user" / ".user.md").is_file())
+        self.assertNotIn(".user/", (root / "README.md").read_text(encoding="utf-8"))
+
     def test_invalid_usage_returns_environment_status(self) -> None:
         root = self.make_repo()
 
         self.assertEqual(2, self.run_script(root).returncode)
         self.assertEqual(2, self.run_script(root, "nested/name").returncode)
         self.assertEqual(2, self.run_script(root, "--descriptor", "other", "DEMO").returncode)
+        self.assertEqual(2, self.run_script(root, "..").returncode)
 
 
 if __name__ == "__main__":

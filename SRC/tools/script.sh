@@ -21,7 +21,8 @@ Self-construct folders with their canonical descriptor, then reload session stat
 Options:
   -r, --root DIR         repository root (default: Git top level, else the tool's ../..)
   -p, --parent DIR       parent folder, relative to the root (default: the root)
-  -d, --descriptor MODE  'self' for NAME/NAME.md, 'readme' for NAME/README.md (default: self)
+  -d, --descriptor MODE  'self' for NAME/NAME.md, 'readme' for NAME/README.md,
+                         'none' for the folder alone (default: self)
   -t, --title TEXT       descriptor heading (default: NAME)
   -s, --summary TEXT     descriptor first paragraph (default: "NAME folder.")
   -m, --metadata "K: V"  add a '- **K:** V' bullet; repeatable
@@ -31,6 +32,9 @@ Options:
       --describe         include repository self-description in the reload
       --no-reload        skip the session reload
   -h, --help             show this help
+
+Hidden names such as '.user' are allowed; they stay out of the parent index
+because descriptor and index rules only apply to visible folders.
 
 Exit status: 0 success, 1 reload verification findings, 2 usage or environment error.
 USAGE
@@ -138,8 +142,8 @@ done
 }
 
 case "$descriptor_mode" in
-self | readme) ;;
-*) fail "--descriptor must be 'self' or 'readme'" ;;
+self | readme | none) ;;
+*) fail "--descriptor must be 'self', 'readme', or 'none'" ;;
 esac
 
 case "$index_mode" in
@@ -234,28 +238,47 @@ skipped=0
 
 for name in "${names[@]}"; do
 	case "$name" in
-	"" | "." | ".." | */* | .*)
+	"" | "." | ".." | */* | *' '*)
 		fail "invalid folder name: $name"
 		;;
 	esac
 
+	hidden="no"
+	case "$name" in
+	.*) hidden="yes" ;;
+	esac
+
 	folder="$parent_dir/$name"
-	if [ "$descriptor_mode" = "readme" ]; then
-		descriptor="$folder/README.md"
-	else
-		descriptor="$folder/$name.md"
-	fi
+	case "$descriptor_mode" in
+	readme) descriptor="$folder/README.md" ;;
+	none) descriptor="" ;;
+	*) descriptor="$folder/$name.md" ;;
+	esac
 	folder_relative=$(relative_to_root "$folder")
-	descriptor_relative=$(relative_to_root "$descriptor")
+	descriptor_relative=""
+	if [ -n "$descriptor" ]; then
+		descriptor_relative=$(relative_to_root "$descriptor")
+	fi
 	entry_title="${title:-$name}"
 	entry_summary="${summary:-$name folder.}"
 	first_line=""
-	if [ "$(basename "$descriptor")" = "README.md" ]; then
+	if [ -n "$descriptor" ] && [ "$(basename "$descriptor")" = "README.md" ]; then
 		first_line="/$descriptor_relative"
 	fi
 
-	note "selfConstructor: $folder_relative/ -> $descriptor_relative"
-	if [ -e "$descriptor" ] && [ "$force" != "yes" ]; then
+	note "selfConstructor: $folder_relative/ -> ${descriptor_relative:-no descriptor}"
+	if [ -z "$descriptor" ]; then
+		if [ -d "$folder" ]; then
+			note "  folder already exists"
+			skipped=$((skipped + 1))
+		elif [ "$dry_run" = "yes" ]; then
+			note "  dry run: would create the folder without a descriptor"
+		else
+			mkdir -p "$folder"
+			note "  created $folder_relative/"
+			created=$((created + 1))
+		fi
+	elif [ -e "$descriptor" ] && [ "$force" != "yes" ]; then
 		note "  descriptor already exists; use --force to rewrite"
 		skipped=$((skipped + 1))
 	elif [ "$dry_run" = "yes" ]; then
@@ -268,6 +291,10 @@ for name in "${names[@]}"; do
 	fi
 
 	if [ "$index_mode" = "skip" ]; then
+		continue
+	fi
+	if [ "$hidden" = "yes" ] || [ -z "$descriptor" ]; then
+		note "  index not required for $folder_relative/"
 		continue
 	fi
 	index_file=$(parent_descriptor)

@@ -83,3 +83,14 @@ derived rather than recorded here.
 - **Validation:** First execution reported the expected registry and index gaps,
   and self-consistency, the complete suite, and whitespace checks pass after
   registration.
+
+## 2026-08-19 — Private prompt capture
+
+- **Revision:** 9
+- **Outcome:** Self-constructed the hidden `AGENTS/.user/` area, stored this
+  session's prompts verbatim, and added a sourceable `BeforeThinking.Add`
+  function plus its plan record.
+- **Decisions:** Hidden folders are exempt from descriptor and index rules; the
+  prompt store is history and never overrides procedure, context, or plans.
+- **Validation:** Self-consistency, the complete suite, Python grammar, and Git
+  whitespace checks pass.

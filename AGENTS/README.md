@@ -36,6 +36,19 @@ When information conflicts, use this order:
 Preserve the semantic intent of remote developer edits during conflict
 resolution. Use `askDev` when intent is ambiguous; never silently overwrite it.
 
+## Before thinking
+
+Record the developer prompt verbatim before reasoning about it:
+
+```sh
+SRC/tools/before_thinking.sh "the developer prompt"
+```
+
+The private store `AGENTS/.user/MyPrompts.md` is history, not authority. It
+preserves original intent for later sessions; it never replaces rolling context,
+the compact log, or this procedure. See
+[`SRC/tools/README.md`](../SRC/tools/README.md) for the function form and options.
+
 ## Before work
 
 ### 1. Establish Git state
